@@ -1,3 +1,7 @@
 /node_modules/
 /.parcel-cache/
 /dist/
+/.idea/
+/backend-build/
+/public/index.js
+/public/index.js.map
