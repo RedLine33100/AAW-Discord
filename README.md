@@ -23,4 +23,3 @@
 1. In `backend` and `frontend` directories, install required dependencies with `npm install`.
 2. In `backend`, run `tsc` to compile TypeScript files. Then run `node --env-file .env build/index.js`.
 3. In `frontend`, run `npm run dev` (for development). More information in the README.
-Perfect
