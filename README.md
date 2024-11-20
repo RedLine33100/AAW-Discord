@@ -11,7 +11,7 @@
 |  |- .env             Environment variables
 |- frontend            React App
 |  |- src              React app source code
-|  |  |- index.tsx     React Root
+|  |  |- main.tsx     React Root
 |  |  |  ...
 |  |- public           Static files
 |  |  |- index.html    Container page
