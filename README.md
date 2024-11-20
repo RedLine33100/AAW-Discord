@@ -3,22 +3,23 @@
 ## Project structure
 
 ```text
-|- public         Static files
-|  |- index.html  Container page
-|  |- index.js    React app generated code
-|- src            React app source code
-|  |- index.tsx   React root
-|     ...
-|- backend-src    Backend source files (*.ts)
-|  |- index.ts    Backend entry point
-|- .env           Envirmonment variables
-|     ...
+|- backend
+|  |- src              Backend source files (*.ts)
+|  |  |- index.ts      Backend entry point
+|  |  |  ...
+|  |- build            Compiled JS files
+|  |- .env             Environment variables
+|- frontend            React App
+|  |- src              React app source code
+|  |  |- index.tsx     React Root
+|  |  |  ...
+|  |- public           Static files
+|  |  |- index.html    Container page
+|  |  |  ...
 ```
 
 ## Configuration
 
-1. Install required dependencies with `npm install`
-2. Build React app with `npm start-web`
-3. Build backend with `npm build`
-4. Run backend with `npm run`
-
+1. In `backend` and `frontend` directories, install required dependencies with `npm install`.
+2. In `backend`, run `tsc` to compile TypeScript files. Then run `node --env-file .env build/index.js`.
+3. In `frontend`, run `npm run dev` (for development). More information in the README.

@@ -1,0 +1,156 @@
+openapi: 3.1.0
+info:
+  title: AAW-Skills
+  description: AAW-Skills
+  version: 1.0.0
+servers:
+  - url: '{scheme}://{host}:{port}/api/v1'
+    variables:
+      scheme:
+        default: "http"
+      hostname:
+        default: "aaw.ngimenez.fr"
+      port:
+        default: "8000"
+paths:
+  # "/auth":
+
+  "/skills":
+    summary: List of skills
+    description: Get the list of skills
+    get:
+      summary: Get the list of skills
+      responses:
+        200:
+          description: List of existing skills
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  type: string
+
+  "/skills/my":
+    summary: User's skills
+    description: Get or manage authenticated user's skills
+    get:
+      summary: Get authenticated user's skills
+      responses:
+        200:
+          description: List of skills with associated grade
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/user_skill"
+    put:
+      summary: Set a skill for authenticated user
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/user_skill'
+      responses:
+        200:
+          description: Update successful.
+        400:
+          description: Invalid request body.
+        404:
+          description: Unknown skill.
+    delete:
+      summary: Remove a skill for authenticated user
+      requestBody:
+        content:
+          "text/plain":
+            description: Name of the skill to remove
+      responses:
+        200:
+          description: Removed skill successfully.
+        404:
+          description: Unknown skill.
+
+  /users:
+    get:
+      summary: List users
+      parameters:
+        - name: offset
+          in: query
+          description: Number of skipped results. Used for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: count
+          in: query
+          description: Maximum number of results. Used for pagination.
+          required: false
+          schema:
+            type: integer
+            default: 25
+        - name: search
+          in: query
+          description: First chars of the user name to look for.
+          required: false
+          schema:
+            type: string
+
+  "/users/me":
+    get:
+      summary: Get information about authenticated user
+      responses:
+        200:
+          description: Information about authenticated user
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user_info"
+        401:
+          description: Not authenticated
+
+  "/users/{discord_id}":
+    summary: Get information about a user
+    parameters:
+      - name: discord_id
+        in: path
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get information about a user
+      responses:
+        200:
+          description: User information
+
+
+
+components:
+  schemas:
+    user_skill:
+      type: object
+      properties:
+        name:
+          description: Skill name
+          type: string
+        grade:
+          description: Grade from 1 to 10 (included)
+          type: integer
+          exclusiveMinimum: 0
+          maximum: 10
+    user_info:
+      type: object
+      properties:
+        name:
+          description: User name
+          type: string
+        discord_id:
+          description: Discord ID (numeric string)
+          type: string
+        last_update:
+          description: Last update date in French (France) format
+          type: string
+        skills:
+          description: List of skills
+          type: array
+          items:
+            $ref: "#/components/schemas/user_skill"
