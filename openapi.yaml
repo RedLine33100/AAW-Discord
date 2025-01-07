@@ -88,12 +88,49 @@ paths:
           schema:
             type: integer
             default: 25
-        - name: search
-          in: query
-          description: First chars of the user name to look for.
-          required: false
-          schema:
-            type: string
+      responses:
+        200:
+          description: List of users
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/user_info"
+
+  "/users/search/{query}":
+    get:
+      summary: Find users by name
+      parameters:
+      - name: query
+        in: path
+        description: First chars of the user name to look for.
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Number of skipped results. Used for pagination.
+        required: false
+        schema:
+          type: integer
+          default: 0
+      - name: count
+        in: query
+        description: Maximum number of results. Used for pagination.
+        required: false
+        schema:
+          type: integer
+          default: 25
+      responses:
+        200:
+          description: Results - list of users
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/basic_user_info"
 
   "/users/me":
     get:
@@ -137,6 +174,18 @@ components:
           type: integer
           exclusiveMinimum: 0
           maximum: 10
+    basic_user_info:
+      type: object
+      properties:
+        name:
+          description: User name
+          type: string
+        discord_id:
+          description: Discord ID (numeric string)
+          type: string
+        last_update:
+          description: Last update date in French (France) format
+          type: string
     user_info:
       type: object
       properties:
