@@ -74,20 +74,15 @@ paths:
     get:
       summary: List users
       parameters:
-        - name: offset
+        - $ref: '#/components/parameters/offset'
+        - $ref: "#/components/parameters/limit"
+        - name: skills
           in: query
-          description: Number of skipped results. Used for pagination.
+          description: If true, the response will contain the skills property.
           required: false
           schema:
-            type: integer
-            default: 0
-        - name: count
-          in: query
-          description: Maximum number of results. Used for pagination.
-          required: false
-          schema:
-            type: integer
-            default: 25
+            type: boolean
+            default: false
       responses:
         200:
           description: List of users
@@ -108,20 +103,8 @@ paths:
         required: true
         schema:
           type: string
-      - name: offset
-        in: query
-        description: Number of skipped results. Used for pagination.
-        required: false
-        schema:
-          type: integer
-          default: 0
-      - name: count
-        in: query
-        description: Maximum number of results. Used for pagination.
-        required: false
-        schema:
-          type: integer
-          default: 25
+      - $ref: '#/components/parameters/offset'
+      - $ref: "#/components/parameters/limit"
       responses:
         200:
           description: Results - list of users
@@ -162,6 +145,23 @@ paths:
 
 
 components:
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: Number of skipped results. Used for pagination.
+      required: false
+      schema:
+        type: integer
+        default: 0
+    limit:
+      name: count
+      in: query
+      description: Maximum number of results. Used for pagination.
+      required: false
+      schema:
+        type: integer
+        default: 25
   schemas:
     user_skill:
       type: object
