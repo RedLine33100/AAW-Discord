@@ -1,10 +1,16 @@
 import express from 'express';
-import {hello} from "./test.js";
+import skillsRouter from "./routes/skills.js";
+import usersRouter from "./routes/users.js";
 
 const port = process.env.PORT || 8000;
 const app = express();
 
-app.get("/hello", (req: express.Request, res: express.Response) => {
-    res.send(hello())
+const API_ROOT_ENDPOINT = "/api/v1";
+
+app.get("/healthcheck", (req: express.Request, res: express.Response) => {
+    res.send("OK");
 });
+app.use(API_ROOT_ENDPOINT + "/skills", skillsRouter)
+app.use(API_ROOT_ENDPOINT + "/users", usersRouter)
+
 app.listen(port, () => console.log(`App listening on port ${port}`));
