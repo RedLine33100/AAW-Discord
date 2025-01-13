@@ -60,7 +60,13 @@ export default Router()
 
             if (result.isEmpty()) {
                 getUserById(req.params!.discordId)
-                    .then(user => res.send(user))
+                    .then(user => {
+                        if (user) {
+                            res.send(user);
+                        } else {
+                            res.status(404).end();
+                        }
+                    })
                     .catch(err => {
                         console.error(err);
                         res.status(500).end();

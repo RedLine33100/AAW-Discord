@@ -29,15 +29,9 @@ export function getUsers(offset: number, limit: number, includeSkills: boolean):
         }).then(response => {
             const usersValueRange = response.data.valueRanges?.at(0);
             const skills = includeSkills ?
-                (response.data.valueRanges?.at(1)?.values?.flat() ?? []) : undefined;
+                (response.data.valueRanges?.at(1)?.values?.at(0) ?? []) : undefined;
 
-            if (usersValueRange) {
-                resolve(
-                    usersValueRange.values?.map(value => mapToUser(value, skills)) ?? []
-                );
-            } else {
-                resolve([]);
-            }
+            resolve(usersValueRange?.values?.map(value => mapToUser(value, skills)) ?? []);
         }).catch(reject);
     });
 }
@@ -63,8 +57,33 @@ export function findUsersByName(name: string, offset: number, limit: number): Pr
     })
 }
 
-export function getUserById(discordId: string): Promise<User> {
-    return new Promise<User>((resolve, reject) => {
-        reject(new Error(`TODO`)); // TODO
+export function getUserById(discordId: string): Promise<User | undefined> {
+    return new Promise<User | undefined>((resolve, reject) => {
+        sheets.spreadsheets.values.batchGetByDataFilter({
+            spreadsheetId: process.env.SPREADSHEET_ID,
+            requestBody: {
+                dataFilters: [
+                    {
+                        gridRange: {
+                            sheetId: Number.parseInt(process.env.SHEET_ID!),
+                            startColumnIndex: 0,
+                            startRowIndex: 1
+                        }
+                    },
+                    {
+                        a1Range: SKILLS_RANGE
+                    }
+                ]
+            }
+        }).then(response => {
+            if (response.data.valueRanges) {
+                const usersValueRange = response.data.valueRanges.at(0)?.valueRange?.values ?? [];
+                const skills = response.data.valueRanges?.at(1)?.valueRange?.values?.at(0) ?? [];
+
+                const userRow = usersValueRange.find(row => row[Column.N_DISCORD_ID] === discordId);
+                resolve(userRow ? mapToUser(userRow, skills) : undefined);
+            }
+            resolve(undefined);
+        }).catch(reject);
     })
 }
