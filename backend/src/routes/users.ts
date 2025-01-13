@@ -75,3 +75,9 @@ export default Router()
                 res.status(400).send({error: result.array()});
             }
     })
+
+    // Get information about authenticated user
+    // TODO Authentication middleware
+    .get("/me", (req, res) => {
+        res.status(500).send("Not implemented");
+    })

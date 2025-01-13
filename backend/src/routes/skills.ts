@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {getSkills} from "../datasource.js";
+import {body, validationResult} from "express-validator";
 
 export default Router()
 
@@ -13,5 +14,38 @@ export default Router()
             });
     })
 
-    // Get or manage authenticated user's skills
-    // TODO
+    // Get authenticated user's skills
+    // TODO Authentication middleware
+    .get("/my", (req, res) => {
+        res.status(500).send("Not implemented");
+    })
+
+    // Set a skill for authenticated user
+    // TODO Authentication middleware
+    .put("/my",
+        body().notEmpty().isLength({max:100}),
+        (req, res) => {
+            const result = validationResult(req);
+
+            if (result.isEmpty()) {
+                res.status(500).send("Not implemented");
+            } else {
+                res.status(500).send({error: result.array()});
+            }
+        }
+    )
+
+    // Remove a skill for authenticated user
+    // TODO Authentication middleware
+    .delete("/my",
+        body().notEmpty().isLength({max:100}),
+        (req, res) => {
+            const result = validationResult(req);
+
+            if (result.isEmpty()) {
+                res.status(500).send("Not implemented");
+            } else {
+                res.status(500).send({error: result.array()});
+            }
+        }
+    )
