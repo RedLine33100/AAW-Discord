@@ -20,7 +20,11 @@ paths:
   "/auth/callback":
     get:
       summary: Callback which receives the authorization code from Discord
-      description: Discord's authorization server redirects the user here. The query string contains the authorization code.
+      description:
+        Discord's authorization server redirects the user here. The query string contains the authorization code.
+        The user is redirected to the front-end application.
+        If the authorization successes, a cookie containing a JSON Web Token is written.
+        If the authorization fails, `error` and `error_description` query string parameters are appended in the redirect URI.
       parameters:
         - name: code
           in: query
