@@ -8,7 +8,7 @@ pipeline{
       steps{
           echo "Building application"
           dir("backend"){
-            sh 'docker build --tag "aaw-backend" .'
+            sh 'sudo docker build --tag "aaw-backend" .'
           }
           dir("frontend"){
             sh 'npm install'
