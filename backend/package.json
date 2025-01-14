@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc index.ts",
     "start": "node --env-file .env build/index.js"
   },
   "repository": {
