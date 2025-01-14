@@ -8,13 +8,15 @@ pipeline{
       steps{
           echo "Building application"
           dir("backend"){
+            sh 'docker stop apibackend'
+            sh 'docker rm apibackend'
             script {
               img = docker.build("test")
               
               echo "B2"
-              img.tag("aaw-backend")
+              img.tag("apibackend")
               echo "B3"
-              img.run("-p 8000:8000")
+              img.run("--name apibackend -p 8000:8000")
               echo "B4"
             }
             //sh 'sudo docker build --tag "aaw-backend" .'
