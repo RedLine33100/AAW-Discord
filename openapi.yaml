@@ -13,50 +13,22 @@ servers:
       port:
         default: "8000"
 paths:
-  # "/auth":
-  "/startAuth":
-    summary: Start the identification process with discord
-    description: Start all of the discord authentification process
-    post:
-      parameters:
-        - name: success_redirect
-          in: query
-          description: The URL to redirect after auth success
-          required: true
-          schema:
-            type: string
-        - name: error_redirect
-          in: query
-          description: The URL to redirect after auth failed
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Return the discord auth URL
-          content:
-            "text/plain":
-              description: Discord Auth URL
-  "/discordAuth":
-    summary: Redirect from discord
-    description: The discord auth endpoint
+  "/auth":
     get:
+      summary: Start the authorization process with Discord OAuth2
+      description: HTTP redirect to the Discord OAuth2 authorization server
+  "/auth/callback":
+    get:
+      summary: Callback which receives the authorization code from Discord
+      description: Discord's authorization server redirects the user here. The query string contains the authorization code.
       parameters:
         - name: code
           in: query
-          description: The discord code to generate token
+          description: The authorization code which is required to get a OAuth token
           required: true
           schema:
             type: string
-        - name: state
-          in: query
-          description: A data that is returned
-          required: true
-          schema:
-            type: string
-    responses:
-      200:
-        description: Everything ok
+
   "/skills":
     summary: List of skills
     description: Get the list of skills
