@@ -9,7 +9,13 @@ pipeline{
           echo "Building application"
           dir("backend"){
             script {
-              docker.build().tag("aaw-backend").run()
+              img = docker.build()
+              
+              echo "B2"
+              img.tag("aaw-backend")
+              echo "B3"
+              img.run()
+              echo "B4"
             }
             //sh 'sudo docker build --tag "aaw-backend" .'
           }
