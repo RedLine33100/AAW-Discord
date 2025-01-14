@@ -8,9 +8,7 @@ pipeline{
       steps{
           echo "Building application"
           dir("backend"){
-            img = docker.build()
-            img.tag("aaw-backend")
-            img.run()
+            docker.build().tag("aaw-backend").run()
             //sh 'sudo docker build --tag "aaw-backend" .'
           }
           dir("frontend"){
