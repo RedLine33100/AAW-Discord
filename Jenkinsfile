@@ -14,7 +14,7 @@ pipeline{
               echo "B2"
               img.tag("aaw-backend")
               echo "B3"
-              img.run()
+              img.run("-p 8000:8000")
               echo "B4"
             }
             //sh 'sudo docker build --tag "aaw-backend" .'
