@@ -8,8 +8,8 @@ pipeline{
       steps{
           echo "Building application"
           dir("backend"){
-            sh 'docker stop apibackend' || true
-            sh 'docker rm apibackend' || true
+            sh 'docker stop apibackend || true'
+            sh 'docker rm apibackend || true'
             script {
               img = docker.build("test")
               
