@@ -22,8 +22,17 @@ pipeline{
             //sh 'sudo docker build --tag "aaw-backend" .'
           }
           dir("frontend"){
-            sh 'npm install'
-            sh 'npm start &'
+            sh 'docker stop aawfrontend || true'
+            sh 'docker rm aawfrontend || true'
+            script {
+              img = docker.build("test")
+              
+              echo "C2"
+              img.tag("aawfrontend")
+              echo "C3"
+              img.run("--name aawfrontend -p 3777:3777")
+              echo "C4"
+            }
           }
       }
     }
