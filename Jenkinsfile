@@ -9,6 +9,7 @@ pipeline{
           echo "Building application"
           dir("backend"){
             sh 'npm install'
+            sh 'npm build'
             sh 'npm start &'
           }
           dir("frontend"){
