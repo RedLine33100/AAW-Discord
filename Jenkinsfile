@@ -9,7 +9,7 @@ pipeline{
           echo "Building application"
           dir("backend"){
             script {
-              img = docker.build()
+              img = docker.build("test")
               
               echo "B2"
               img.tag("aaw-backend")
