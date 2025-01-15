@@ -2,6 +2,8 @@ import {Router} from "express";
 import {body, validationResult} from "express-validator";
 import {jwtAuth} from "../jwt.js";
 import {getSkills} from "../datasource/skill.js";
+import {getUserById} from "../datasource/user.js";
+import {User} from "../types/user.js";
 
 export default Router()
 
@@ -16,9 +18,19 @@ export default Router()
     })
 
     // Get authenticated user's skills
-    // TODO Implementation
     .get("/my", jwtAuth, (req, res) => {
-        res.status(500).send("Not implemented");
+        getUserById(req.authorization.id)
+            .then((user?: User) => {
+                if (user) {
+                    res.send(user.skills);
+                } else {
+                    res.status(500).end();
+                }
+            }).catch(reason => {
+                console.error(reason);
+                res.status(500).end();
+            }
+        );
     })
 
     // Set a skill for authenticated user

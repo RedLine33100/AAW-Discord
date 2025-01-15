@@ -2,6 +2,7 @@ import {Router} from "express";
 import {param, query, validationResult} from "express-validator";
 import {jwtAuth} from "../jwt.js";
 import {findUsersByName, getUserById, getUsers} from "../datasource/user.js";
+import {User} from "../types/user.js";
 
 export default Router()
 
@@ -30,9 +31,19 @@ export default Router()
     })
 
     // Get information about authenticated user
-    // TODO Implementation
     .get("/me", jwtAuth, (req, res) => {
-        res.status(500).send(req.authorization);
+        getUserById(req.authorization.id)
+            .then((user?: User) => {
+                if (user) {
+                    res.send(user);
+                } else {
+                    res.status(500).end();
+                }
+            }).catch(reason => {
+                console.log(reason);
+                res.status(500).end();
+            }
+        );
     })
 
     // Find users by name
