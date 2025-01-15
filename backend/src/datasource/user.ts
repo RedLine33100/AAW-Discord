@@ -62,8 +62,18 @@ export function getUserById(discordId: string): Promise<User | undefined> {
             }
         }).then(response => {
             if (response.data.valueRanges) {
-                const usersValueRange = response.data.valueRanges.at(0)?.valueRange?.values ?? [];
-                const skills = response.data.valueRanges?.at(1)?.valueRange?.values?.at(0) ?? [];
+                // Value ranges are not returned in the right order, so we have to figure out the indices
+                const skillsRangeIndex = response.data.valueRanges.findIndex(vr =>
+                    vr.dataFilters?.at(0)?.a1Range === SKILLS_RANGE
+                );
+                const usersRangeIndex = skillsRangeIndex === 1 ? 0 : 1;
+
+                if (skillsRangeIndex === -1) {
+                    throw new Error("Invalid skills range index");
+                }
+
+                const usersValueRange = response.data.valueRanges.at(usersRangeIndex)?.valueRange?.values ?? [];
+                const skills = response.data.valueRanges?.at(skillsRangeIndex)?.valueRange?.values?.at(0) ?? [];
 
                 const userRow = usersValueRange.find(row => row[Column.N_DISCORD_ID] === discordId);
                 resolve(userRow ? mapToUser(userRow, skills) : undefined);
