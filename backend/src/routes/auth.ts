@@ -62,7 +62,7 @@ export default Router()
                     );
 
                     var expire = new Date();
-                    expire.setUTCMonth(expire.getUTCMonth() + 1);
+                    expire.setDate(expire.getDate() + 24 * 60 * 60 * 1000);
 
                     var id : ObjectId | null = await mongo.insertData("user_auth", "token", {
                         discordUSERID: userDataResponse.data.id,
