@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {param, query, validationResult} from "express-validator";
 import {getUsers, findUsersByName, getUserById} from "../datasource.js";
+import {jwtAuth} from "../jwt.js";
 
 export default Router()
 
@@ -26,6 +27,12 @@ export default Router()
             } else {
                 res.status(400).send({error: result.array()});
             }
+    })
+
+    // Get information about authenticated user
+    // TODO Implementation
+    .get("/me", jwtAuth, (req, res) => {
+        res.status(500).send(req.authorization);
     })
 
     // Find users by name
@@ -74,10 +81,4 @@ export default Router()
             } else {
                 res.status(400).send({error: result.array()});
             }
-    })
-
-    // Get information about authenticated user
-    // TODO Authentication middleware
-    .get("/me", (req, res) => {
-        res.status(500).send("Not implemented");
-    })
+    });

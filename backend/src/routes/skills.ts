@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {getSkills} from "../datasource.js";
 import {body, validationResult} from "express-validator";
+import {jwtAuth} from "../jwt.js";
 
 export default Router()
 
@@ -15,15 +16,16 @@ export default Router()
     })
 
     // Get authenticated user's skills
-    // TODO Authentication middleware
-    .get("/my", (req, res) => {
+    // TODO Implementation
+    .get("/my", jwtAuth, (req, res) => {
         res.status(500).send("Not implemented");
     })
 
     // Set a skill for authenticated user
-    // TODO Authentication middleware
+    // TODO Implementation
     .put("/my",
         body().notEmpty().isLength({max:100}),
+        jwtAuth,
         (req, res) => {
             const result = validationResult(req);
 
@@ -36,9 +38,10 @@ export default Router()
     )
 
     // Remove a skill for authenticated user
-    // TODO Authentication middleware
+    // TODO Implementation
     .delete("/my",
         body().notEmpty().isLength({max:100}),
+        jwtAuth,
         (req, res) => {
             const result = validationResult(req);
 
