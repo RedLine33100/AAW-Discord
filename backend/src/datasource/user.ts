@@ -1,20 +1,5 @@
-import sheets from "./sheets.js";
-import {Column} from "./columns.js";
-
-import {mapToUser, User} from "./schemas.js";
-
-const SKILLS_RANGE = `${Column.A_FIRST_SKILL_COLUMN}1:1`;
-
-export function getSkills(): Promise<string[]> {
-    return new Promise<string[]>((resolve, reject) => {
-        sheets.spreadsheets.values.get({
-            spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-            range: SKILLS_RANGE,
-        }).then(response => {
-            resolve(response.data.values?.at(0) ?? []);
-        }).catch(reject);
-    });
-}
+import {mapToUser, User} from "../types/user.js";
+import {Column, SHEETS, SKILLS_RANGE} from "./google-sheets.js";
 
 export function getUsers(offset: number, limit: number, includeSkills: boolean): Promise<User[]> {
     const firstRow = offset + 2;
@@ -23,7 +8,7 @@ export function getUsers(offset: number, limit: number, includeSkills: boolean):
         `${firstRow}:${lastRow}` : `${Column.A_NAME}${firstRow}:${Column.A_LAST_UPDATE}${lastRow}`;
 
     return new Promise<User[]>((resolve, reject) => {
-        sheets.spreadsheets.values.batchGet({
+        SHEETS.spreadsheets.values.batchGet({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
             ranges: includeSkills ? [dataRange, SKILLS_RANGE] : [dataRange],
         }).then(response => {
@@ -40,7 +25,7 @@ export function findUsersByName(name: string, offset: number, limit: number): Pr
     const _name = name.toLowerCase();
 
     return new Promise<User[]>((resolve, reject) => {
-        sheets.spreadsheets.values.get({
+        SHEETS.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
             range: "A2:C"
         }).then(response => {
@@ -59,7 +44,7 @@ export function findUsersByName(name: string, offset: number, limit: number): Pr
 
 export function getUserById(discordId: string): Promise<User | undefined> {
     return new Promise<User | undefined>((resolve, reject) => {
-        sheets.spreadsheets.values.batchGetByDataFilter({
+        SHEETS.spreadsheets.values.batchGetByDataFilter({
             spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
             requestBody: {
                 dataFilters: [

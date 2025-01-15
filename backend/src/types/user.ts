@@ -1,4 +1,4 @@
-import {Column} from "./columns.js";
+import {Column} from "../datasource/google-sheets.js";
 
 export type UserSkill = {
     name: string;
@@ -25,13 +25,4 @@ export function mapToUser(data: string[], skills?: string[]): User {
             };
         })
     };
-}
-
-// Extensions to Request objects
-declare global {
-    namespace Express {
-        export interface Request {
-            authorization?: any;
-        }
-    }
 }

@@ -1,7 +1,7 @@
 import {Router} from "express";
-import {getSkills} from "../datasource.js";
 import {body, validationResult} from "express-validator";
 import {jwtAuth} from "../jwt.js";
+import {getSkills} from "../datasource/skill.js";
 
 export default Router()
 
