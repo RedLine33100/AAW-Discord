@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {param, query, validationResult} from "express-validator";
-import {jwtAuth} from "../jwt.js";
+import {jwtAuth} from "../auth-middlewares.js";
 import {findUsersByName, getUserById, getUsers} from "../datasource/user.js";
 
 export default Router()
