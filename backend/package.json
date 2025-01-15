@@ -17,18 +17,22 @@
     "url": "https://github.com/RedLine33100/AAW-Discord/issues"
   },
   "homepage": "https://github.com/RedLine33100/AAW-Discord#readme",
-  "description": "",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@types/uuid": "^10.0.0",
     "axios": "^1.7.9",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.1",
     "express-validator": "^7.2.1",
     "googleapis": "^144.0.0",
-    "jose": "^5.9.6"
-  }
+    "jose": "^5.9.6",
+    "mongodb": "^6.12.0",
+    "uuid": "^11.0.5"
+  },
+  "keywords": [],
+  "description": ""
 }

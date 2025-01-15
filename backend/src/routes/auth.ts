@@ -2,10 +2,14 @@ import {Router} from "express";
 import {query, validationResult} from "express-validator";
 import axios from "axios";
 import {AUTH_COOKIE, signJWT} from "../jwt.js";
+import {MongoManager} from "../datasource/MongoManager.js";
 
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 const DISCORD_USER_DATA_URL = "https://discord.com/api/v10/users/@me";
+
+var mongo = new MongoManager();
+import {ObjectId} from "mongodb";
 
 export default Router()
 
@@ -57,9 +61,23 @@ export default Router()
                         }
                     );
 
+                    var expire = new Date();
+                    expire.setUTCMonth(expire.getUTCMonth() + 1);
+
+                    var id : ObjectId | null = await mongo.insertData("user_auth", "token", {
+                        discordUSERID: userDataResponse.data.id,
+                        expireDate: expire.getTime(),
+                        valid: true,
+                    })
+
+                    if(id == null){
+                        throw new Error("DB insert error");
+                    }
+
                     // JSON Web Token
                     const jwt = await signJWT({
                         id: userDataResponse.data.id,
+                        tokenID: id.toString(),
                         username: userDataResponse.data.username
                     });
 
@@ -67,8 +85,6 @@ export default Router()
                         httpOnly: true,
                         maxAge: 24 * 60 * 60 * 1000,
                     });
-
-                    // TODO other things... (create session ID...)
                 } catch(reason) {
                     console.error(reason);
                     res.status(500).send("Internal Server Error");
