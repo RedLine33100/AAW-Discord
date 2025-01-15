@@ -19,11 +19,13 @@
   "homepage": "https://github.com/RedLine33100/AAW-Discord#readme",
   "description": "",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "cookie-parser": "^1.4.7",
     "express": "^4.21.1",
     "express-validator": "^7.2.1",
     "googleapis": "^144.0.0",

@@ -1,7 +1,7 @@
 import {Router} from "express";
 import {query, validationResult} from "express-validator";
 import axios from "axios";
-import {signJWT} from "../jwt.js";
+import {AUTH_COOKIE, signJWT} from "../jwt.js";
 
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
@@ -63,7 +63,7 @@ export default Router()
                         username: userDataResponse.data.username
                     });
 
-                    res.cookie("access_token", jwt, {
+                    res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: true,
                         maxAge: 24 * 60 * 60 * 1000,
                     });

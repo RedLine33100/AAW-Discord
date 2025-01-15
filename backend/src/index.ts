@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import skillsRouter from "./routes/skills.js";
 import usersRouter from "./routes/users.js";
 import authRouter from "./routes/auth.js";
@@ -11,6 +12,7 @@ const API_ROOT_ENDPOINT = "/api/v1";
 app.get("/healthcheck", (req: express.Request, res: express.Response) => {
     res.send("OK");
 });
+app.use(cookieParser())
 app.use(API_ROOT_ENDPOINT + "/auth", authRouter);
 app.use(API_ROOT_ENDPOINT + "/skills", skillsRouter);
 app.use(API_ROOT_ENDPOINT + "/users", usersRouter);
