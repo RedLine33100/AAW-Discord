@@ -82,3 +82,47 @@ export function getUserById(discordId: string): Promise<User | undefined> {
         }).catch(reject);
     })
 }
+
+/**
+ * Returns the row index for given Discord ID (>= 2 if found, -1 if not found)
+ */
+function getRowIndexForUser(discordId: string): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+        SHEETS.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+            range: `${Column.A_DISCORD_ID}2:${Column.A_DISCORD_ID}`
+        }).then(response => {
+            const values = response.data.values?.flat();
+            if (values) {
+                const index = values.indexOf(discordId);
+                resolve(index >= 0 ? index + 2 : -1);
+            }
+            resolve(-1);
+        }).catch(reject);
+    })
+}
+
+async function insertUser(name: string, discordId: string) {
+    await SHEETS.spreadsheets.values.append({
+        spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+        range: `A2:2`,
+        insertDataOption: "INSERT_ROWS",
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+            values: [
+                [
+                    name,
+                    discordId,
+                    new Date().toLocaleString("fr-FR")
+                ]
+            ]
+        }
+    });
+}
+
+export async function insertUserIfNotExist(name: string, discordId: string) {
+    const index = await getRowIndexForUser(discordId);
+    if (index === -1) {
+        await insertUser(name, discordId);
+    }
+}
