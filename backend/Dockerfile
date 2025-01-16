@@ -3,7 +3,6 @@ FROM node
 WORKDIR /app/backend
 
 COPY package*.json ./
-COPY .env ./
 
 RUN npm install
 
