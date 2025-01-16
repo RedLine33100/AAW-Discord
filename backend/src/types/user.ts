@@ -18,7 +18,10 @@ export function mapToUser(data: string[], skills?: string[]): User {
         discordId: data[Column.N_DISCORD_ID],
         lastUpdate: data[Column.N_LAST_UPDATE],
         skills: skills?.flatMap((value, index): UserSkill | [] => {
-            const grade = Number.parseInt(data[Column.N_FIRST_SKILL_COLUMN + index]);
+            let gradeString = data[Column.N_FIRST_SKILL_COLUMN + index]?.trim() ?? "";
+            if (gradeString.startsWith("'")) gradeString.slice(1);
+            const grade = Number.parseInt(gradeString);
+
             return isNaN(grade) || grade === 0 ? [] : {
                 name: value,
                 grade
