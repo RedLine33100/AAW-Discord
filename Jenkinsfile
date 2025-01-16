@@ -16,7 +16,8 @@ pipeline{
               echo "B2"
               img.tag("apibackend")
               echo "B3"
-              img.run("--name apibackend -p 8000:8000 . .> /logs/apibackend${Util.getTimeSpanString(System.currentTimeMillis())}.log")
+              def now = new Date()
+              img.run("--name apibackend -p 8000:8000 . .> /logs/apibackend"+now.format("yyMMdd_HHmm", TimeZone.getTimeZone('UTC+1'))+".log")
               echo "B4"
             }
             //sh 'sudo docker build --tag "aaw-backend" .'
@@ -30,7 +31,8 @@ pipeline{
               echo "C2"
               img.tag("aawfrontend")
               echo "C3"
-              img.run("--name aawfrontend -p 3777:3777 . .> /logs/aawfrontend${Util.getTimeSpanString(System.currentTimeMillis())}.log")
+              def now = new Date()
+              img.run("--name aawfrontend -p 3777:3777 . .> /logs/aawfrontend"+now.format("yyMMdd_HHmm", TimeZone.getTimeZone('UTC+1'))+".log")
               echo "C4"
             }
           }
