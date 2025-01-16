@@ -17,7 +17,7 @@ pipeline{
               img.tag("apibackend")
               echo "B3"
               sh 'cp /var/docker/backend/.env '+workspace+'/backend'
-              sh 'docker run -d --env-file .env --name apibackend -p 8000:8000 apibackendi'
+              sh 'docker run -d --env-file .env --restart always --name apibackend -p 8000:8000 apibackendi'
               //img.run("--name apibackend -p 8000:8000 .)
               echo "B4"
             }
@@ -33,7 +33,7 @@ pipeline{
               img.tag("aawfrontend")
               echo "C3"
               sh 'cp /var/docker/frontend/.env '+workspace+'/frontend'
-              sh 'docker run -d --env-file .env --name aawfrontend -p 3777:3777 aawfrontendi'
+              sh 'docker run -d --env-file .env --restart always --name aawfrontend -p 3777:3777 aawfrontendi'
               echo "C4"
             }
           }
