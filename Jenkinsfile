@@ -17,7 +17,7 @@ pipeline{
               img.tag("apibackend")
               echo "B3"
               def now = new Date()
-              sh 'cp /var/docker/backend/.env ${workspace}/backend'
+              sh 'cp /var/docker/backend/.env '+workspace+'/backend'
               sh 'docker run -d --env-file .end --name apibackend -p 8000:8000 apibackendi'
               //img.run("--name apibackend -p 8000:8000 .)
               echo "B4"
