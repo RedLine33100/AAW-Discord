@@ -16,7 +16,7 @@ pipeline{
               echo "B2"
               img.tag("apibackend")
               echo "B3"
-              img.run("--name apibackend -p 8000:8000")
+              img.run("--name apibackend -p 8000:8000 . .> /logs/apibackend"+timestamps()+".log")
               echo "B4"
             }
             //sh 'sudo docker build --tag "aaw-backend" .'
@@ -30,7 +30,7 @@ pipeline{
               echo "C2"
               img.tag("aawfrontend")
               echo "C3"
-              img.run("--name aawfrontend -p 3777:3777")
+              img.run("--name aawfrontend -p 3777:3777 . .> /logs/aawfrontend"+timestamps()+".log")
               echo "C4"
             }
           }
