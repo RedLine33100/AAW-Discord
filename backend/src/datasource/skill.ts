@@ -1,4 +1,10 @@
-import {SHEETS, SKILLS_RANGE} from "./google-sheets.js";
+import {Column, DISCORD_ID_RANGE, SHEETS, SKILLS_RANGE} from "./google-sheets.js";
+
+export enum SetSkillResult {
+    SUCCESS = "success",
+    UNKNOWN_SKILL = "unknown_skill",
+    UNKOWN_USER = "unknown_user",
+}
 
 export function getSkills(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
@@ -9,4 +15,51 @@ export function getSkills(): Promise<string[]> {
             resolve(response.data.values?.at(0) ?? []);
         }).catch(reject);
     });
+}
+
+export function setSkill(discordId: string, skillName: string, grade: number): Promise<SetSkillResult> {
+    return new Promise<SetSkillResult>((resolve, reject) => {
+        // Find the index of the skill and the index of the user
+        SHEETS.spreadsheets.values.batchGet({
+            spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+            ranges: [
+                SKILLS_RANGE,
+                DISCORD_ID_RANGE
+            ]
+        }).then(response => {
+            const skills = response.data.valueRanges?.at(0)?.values?.at(0) ?? [];
+            const users = response.data.valueRanges?.at(1)?.values?.flat() ?? [];
+
+            const skillIndex = skills.indexOf(skillName);
+            if (skillIndex === -1) {
+                resolve(SetSkillResult.UNKNOWN_SKILL);
+            }
+
+            const userIndex = users.indexOf(discordId);
+            if (userIndex === -1) {
+                resolve(SetSkillResult.UNKOWN_USER);
+            }
+
+            SHEETS.spreadsheets.values.batchUpdateByDataFilter({
+                spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+                requestBody: {
+                    valueInputOption: "USER_ENTERED",
+                    data: [
+                        {
+                            dataFilter: {
+                                gridRange: {
+                                    sheetId: Number.parseInt(process.env.GOOGLE_SHEET_ID!),
+                                    startRowIndex: userIndex + 1,
+                                    startColumnIndex: skillIndex + Column.N_FIRST_SKILL_COLUMN
+                                }
+                            },
+                            values: [
+                                [grade]
+                            ]
+                        }
+                    ]
+                }
+            })
+        }).then(_ => resolve(SetSkillResult.SUCCESS)).catch(reject);
+    })
 }
