@@ -6,6 +6,10 @@ export enum SetSkillResult {
     UNKOWN_USER = "unknown_user",
 }
 
+/**
+ * **Read-Only**.
+ * Returns a `Promise` wrapping the list of existing skills.
+ */
 export function getSkills(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
         SHEETS.spreadsheets.values.get({
@@ -17,6 +21,11 @@ export function getSkills(): Promise<string[]> {
     });
 }
 
+/**
+ * **Read-Write**.
+ * Updates the grade (between 0 and 10 inclusive) for the given skill name and for the given user (`discordId`).
+ * Returns a `Promise` indicating if the update was successful, or if the given skill or user was not found.
+ */
 export function setSkill(discordId: string, skillName: string, grade: number): Promise<SetSkillResult> {
     return new Promise<SetSkillResult>((resolve, reject) => {
         // Find the index of the skill and the index of the user
