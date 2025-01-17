@@ -8,6 +8,8 @@ import AuthPage from "./Authentification.tsx";
 
 
 function App() {
+    const BACKEND_URL = "http://aaw.ngimenez.fr:8000/api/v1";
+
     return (
         <Router>
             <div className="App">
@@ -22,9 +24,9 @@ function App() {
                                     <Link to="/skills-overview" className="skillsoverview">Skills Overview</Link>
                                 </li>
                                 <li>
-                                    <Link to="/login" className="Authetification">
+                                    <a href={`${BACKEND_URL}/auth`} className="Authetification">
                                         Log in
-                                    </Link>
+                                    </a>
                                 </li>
                             </ul>
                         </nav>
@@ -32,10 +34,10 @@ function App() {
                 </header>
                 <main>
                     <Routes>
-                        <Route path="/skills-overview" element={<SkillsOverview />} />
-                        <Route path="/login" element={<AuthPage />} />
-                        <Route path="/my-skills" element={<MySkills />} />
-                        <Route path="/user/:userName" element={<UserSkills />} />
+                        <Route path="/skills-overview" element={<SkillsOverview/>}/>
+                        <Route path="/login" element={<AuthPage/>}/>
+                        <Route path="/my-skills" element={<MySkills/>}/>
+                        <Route path="/user/:userName" element={<UserSkills/>}/>
                     </Routes>
                 </main>
             </div>
