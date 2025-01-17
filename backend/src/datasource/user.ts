@@ -1,6 +1,13 @@
 import {mapToUser, User} from "../types/user.js";
 import {Column, SHEETS, SKILLS_RANGE} from "./google-sheets.js";
 
+/**
+ * **Read-Only**.
+ * Returns a `Promise` wrapping a list of {@link User} objects.
+ * @param offset Number of skipped results
+ * @param limit Maximum number of returned results
+ * @param includeSkills Include the list of {@link UserSkill}s for each user
+ */
 export function getUsers(offset: number, limit: number, includeSkills: boolean): Promise<User[]> {
     const firstRow = offset + 2;
     const lastRow = limit + offset + 1;
@@ -21,8 +28,15 @@ export function getUsers(offset: number, limit: number, includeSkills: boolean):
     });
 }
 
-export function findUsersByName(name: string, offset: number, limit: number): Promise<User[]> {
-    const _name = name.toLowerCase();
+/**
+ * **Read-Only**.
+ * Returns a `Promise` wrapping a list of {@link User} objects. Skills are not included.
+ * @param username First chars of the username
+ * @param offset Number of skipped results
+ * @param limit Maximum number of returned results
+ */
+export function findUsersByName(username: string, offset: number, limit: number): Promise<User[]> {
+    const _name = username.toLowerCase();
 
     return new Promise<User[]>((resolve, reject) => {
         SHEETS.spreadsheets.values.get({
@@ -42,6 +56,10 @@ export function findUsersByName(name: string, offset: number, limit: number): Pr
     })
 }
 
+/**
+ * **Read-Only**.
+ * Returns a `Promise` wrapping the {@link User} having the given Discord ID, or `undefined` if there is no such user.
+ */
 export function getUserById(discordId: string): Promise<User | undefined> {
     return new Promise<User | undefined>((resolve, reject) => {
         SHEETS.spreadsheets.values.batchGetByDataFilter({
@@ -81,4 +99,57 @@ export function getUserById(discordId: string): Promise<User | undefined> {
             resolve(undefined);
         }).catch(reject);
     })
+}
+
+/**
+ * **Read-Only**.
+ * Returns the row index for given Discord ID (>= 2 if found, -1 if not found)
+ */
+function getRowIndexForUser(discordId: string): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+        SHEETS.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+            range: `${Column.A_DISCORD_ID}2:${Column.A_DISCORD_ID}`
+        }).then(response => {
+            const values = response.data.values?.flat();
+            if (values) {
+                const index = values.indexOf(discordId);
+                resolve(index >= 0 ? index + 2 : -1);
+            }
+            resolve(-1);
+        }).catch(reject);
+    })
+}
+
+/**
+ * **Read-Write**.
+ * Inserts a user.
+ */
+async function insertUser(username: string, discordId: string) {
+    await SHEETS.spreadsheets.values.append({
+        spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+        range: `A2:2`,
+        insertDataOption: "INSERT_ROWS",
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+            values: [
+                [
+                    username,
+                    discordId,
+                    new Date().toLocaleString("fr-FR")
+                ]
+            ]
+        }
+    });
+}
+
+/**
+ * **Read-Write**.
+ * Insert the user if the given Discord ID is not present.
+ */
+export async function insertUserIfNotExist(username: string, discordId: string) {
+    const index = await getRowIndexForUser(discordId);
+    if (index === -1) {
+        await insertUser(username, discordId);
+    }
 }

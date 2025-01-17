@@ -2,6 +2,7 @@ import {Router} from "express";
 import {query, validationResult} from "express-validator";
 import axios from "axios";
 import {AUTH_COOKIE, signJWT} from "../jwt.js";
+import {insertUserIfNotExist} from "../datasource/user.js";
 
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
@@ -69,6 +70,8 @@ export default Router()
                     });
 
                     // TODO other things... (create session ID...)
+
+                    await insertUserIfNotExist(userDataResponse.data.username, userDataResponse.data.id)
                 } catch(reason) {
                     console.error(reason);
                     res.status(500).send("Internal Server Error");

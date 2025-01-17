@@ -28,3 +28,4 @@ export namespace Column {
 }
 
 export const SKILLS_RANGE = `${Column.A_FIRST_SKILL_COLUMN}1:1`;
+export const DISCORD_ID_RANGE = `${Column.A_DISCORD_ID}2:${Column.A_DISCORD_ID}`;
