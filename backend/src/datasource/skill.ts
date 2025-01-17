@@ -65,6 +65,18 @@ export function setSkill(discordId: string, skillName: string, grade: number): P
                             values: [
                                 [grade]
                             ]
+                        },
+                        {
+                            dataFilter: {
+                                gridRange: {
+                                    sheetId: Number.parseInt(process.env.GOOGLE_SHEET_ID!),
+                                    startRowIndex: userIndex + 1,
+                                    startColumnIndex: Column.N_LAST_UPDATE
+                                }
+                            },
+                            values: [
+                                [new Date().toLocaleString("fr-FR")]
+                            ]
                         }
                     ]
                 }
