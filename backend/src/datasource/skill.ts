@@ -42,11 +42,13 @@ export function setSkill(discordId: string, skillName: string, grade: number): P
             const skillIndex = skills.indexOf(skillName);
             if (skillIndex === -1) {
                 resolve(SetSkillResult.UNKNOWN_SKILL);
+                return;
             }
 
             const userIndex = users.indexOf(discordId);
             if (userIndex === -1) {
                 resolve(SetSkillResult.UNKOWN_USER);
+                return;
             }
 
             SHEETS.spreadsheets.values.batchUpdateByDataFilter({
@@ -80,7 +82,7 @@ export function setSkill(discordId: string, skillName: string, grade: number): P
                         }
                     ]
                 }
-            })
+            });
         }).then(_ => resolve(SetSkillResult.SUCCESS)).catch(reject);
     })
 }
