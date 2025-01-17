@@ -1,3 +1,4 @@
+/* Variables globales */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,56 +14,168 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* Styles globaux pour html et body */
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%; /* Occupe toute la largeur */
+  height: 100%; /* Occupe toute la hauteur */
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  box-sizing: border-box;
+  overflow: hidden; /* Supprime les scrolls indésirables */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Conteneur principal (root) */
+#root {
+  width: 100%; /* Prend toute la largeur */
+  height: 100%; /* Prend toute la hauteur */
+  display: flex;
+  flex-direction: column; /* Disposition verticale */
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* Conteneur des skills */
+.my-skills {
+  width: 100%; /* Occupe toute la largeur de la page */
+  height: 100%; /* Occupe toute la hauteur disponible */
+  padding: 20px; /* Espacement interne */
+  box-sizing: border-box; /* Inclut le padding dans les dimensions */
+  overflow-y: auto; /* Scroll uniquement si le contenu dépasse */
+  background-color: #ffffff; /* Fond blanc pour contraster */
+}
+
+/* En-tête */
+.my-skills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Bouton d'ajout */
+.add-button {
+  color: white;
+  background-color: #6943ff;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all 0.3s ease;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.add-button:hover {
+  background: #5639cc;
+}
+
+/* Liste des compétences */
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacement entre les éléments */
+  width: 100%; /* Prend toute la largeur */
+  box-sizing: border-box; /* Inclut les paddings/marges dans les dimensions */
+}
+
+/* Élément individuel */
+.skill-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px; /* Espacement interne réduit */
+  background: #f9f9f9;
+  border-radius: 6px; /* Coins légèrement arrondis */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Prend toute la largeur disponible */
+  box-sizing: border-box;
+}
+
+/* Nom de la compétence */
+.skill-name {
+  flex: 2;
+  font-size: 1.2rem; /* Réduction de la taille du texte */
+  font-weight: bold;
+  color: #333;
+  margin-right: 10px; /* Espacement entre le nom et la barre */
+}
+
+/* Conteneur de la barre de progression */
+.progress-bar-container {
+  flex: 5; /* Plus d'espace pour la barre */
+  background: #e0e0e0;
+  border-radius: 6px; /* Coins légèrement arrondis */
+  overflow: hidden;
+  height: 15px; /* Hauteur réduite */
+  margin: 0 15px;
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Niveau de la compétence */
+.skill-level {
+  flex: 0.5;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  text-align: right; /* Alignement à droite */
+}
+
+/* Boutons d'action */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacement entre les boutons */
+  flex: 1;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #6943ff;
+  transition: color 0.3s ease;
+}
+
+.action-button:hover {
+  color: #5639cc;
+}
+
+.action-button.delete {
+  color: red;
+}
+
+.action-button.delete:hover {
+  color: darkred;
+}
+
+/* Styles pour les médias (petits écrans) */
+@media (max-width: 768px) {
+  .my-skills {
+    padding: 10px;
   }
-  a:hover {
-    color: #747bff;
+  .skill-name {
+    font-size: 1rem;
   }
-  button {
-    background-color: #f9f9f9;
+  .progress-bar-container {
+    height: 12px;
+    margin: 0 10px;
+  }
+  .skill-level {
+    font-size: 1rem;
   }
 }

@@ -1,0 +1,106 @@
+
+/* Title */
+.auth-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form styles */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Input field group */
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #6a11cb;
+    outline: none;
+}
+
+/* Button styles */
+.auth-button {
+    background: #6a11cb;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.auth-button:hover {
+    background: #4e0ba6;
+}
+
+/* Footer styles */
+.auth-footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.auth-footer a {
+    color: #6a11cb;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.auth-footer a:hover {
+    color: #4e0ba6;
+}
+/* Apply gradient to the entire page */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Uniform gradient */
+    font-family: "Arial", sans-serif;
+}
+
+/* Root React container to fill the viewport */
+#root {
+    height: 100%;
+}
+
+/* Auth container styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Matches the height of the parent (#root) */
+    width: 100%; /* Ensures it spans the full width */
+}
+
+/* Auth card styles remain unchanged */
+.auth-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
