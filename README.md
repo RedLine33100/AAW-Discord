@@ -41,5 +41,8 @@ In the `backend` directory, create a `.env` file containing the following enviro
 | `DISCORD_REDIRECT_URI`  | [OAuth] Callback URI used to get the authorization code from Discord authorization server (e.g. `https://aawapi.ngimenez.fr/auth/callback`) |
 | `FRONTEND_REDIRECT_URI` | URI on which the user has to be redirected once the authorization process is done (front-end)                                               |
 | `JWT_SECRET`            | Secret for signing JSON Web Tokens                                                                                                          |
+| `MONGO_USER`            | User for the mongodb database, require to connect                                                                                           |
+| `MONGO_PASSWORD`        | Password for the mongodb database                                                                                                           |
+| `MONGO_URL`             | Mongodb server address (e.g. `https://mongodb.ngimenez.fr`)                                                                                 |
 
 To get Google credentials: <https://console.cloud.google.com/apis/credentials>. Generate a credentials JSON file and copy the relevant values in the `.env` file.
