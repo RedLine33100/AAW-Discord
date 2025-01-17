@@ -4,8 +4,9 @@ import axios from "axios";
 import {AUTH_COOKIE, signJWT} from "../jwt.js";
 import {insertUserIfNotExist} from "../datasource/user.js";
 import {ObjectId} from 'mongodb';
-import {MONGO_MANAGER} from "../index.js";
+import {MongoManager} from "../datasource/mongomanager.js";
 
+const mongo = new MongoManager();
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 const DISCORD_USER_DATA_URL = "https://discord.com/api/v10/users/@me";
@@ -64,7 +65,7 @@ export default Router()
                     const expire = new Date();
                     expire.setDate(expire.getDate() + 24 * 60 * 60 * 1000);
 
-                    const id : ObjectId | null = await MONGO_MANAGER.insertData("user_auth", "token", {
+                    const id : ObjectId | null = await mongo.insertData("user_auth", "token", {
                         discordUSERID: userDataResponse.data.id,
                         expireDate: expire.getTime(),
                         valid: true,
