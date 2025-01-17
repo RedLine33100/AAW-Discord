@@ -33,7 +33,7 @@ pipeline{
               img.tag("aawfrontend")
               echo "C3"
               sh 'cp /var/docker/frontend/.env '+workspace+'/frontend'
-              sh 'docker run -d --env-file .env --restart always --name aawfrontend -p 3777:3777 aawfrontendi'
+              sh 'docker run -d --restart always --name aawfrontend -p 3777:3777 aawfrontendi'
               echo "C4"
             }
           }
