@@ -9,6 +9,9 @@ const BASIC = "basic";
 const BOT_USERNAME = "bot";
 const BOT_CREDENTIALS = btoa(`${BOT_USERNAME}:${process.env.BOT_SECRET}`);
 
+import {MONGO_MANAGER} from "../index.js";
+import {Document, ObjectId} from "mongodb";
+
 export const userJwtAuth: RequestHandler = async (req, res, next) => {
     const unauthorizedResponse = (res: Response, reason: string) => {
         res.setHeader('WWW-Authenticate', 'Bearer realm="user"');
@@ -23,6 +26,28 @@ export const userJwtAuth: RequestHandler = async (req, res, next) => {
 
         if (authorization && authorization.slice(0, BEARER.length).toLowerCase() === BEARER) {
             const {payload} = await decodeJWT(authorization.split(" ")[1]);
+
+            const promise : Document | null = await MONGO_MANAGER.findOneByElement("user_auth", "token", {
+                _id: new ObjectId(typeof payload.tokenID === "string" ? payload.tokenID : "")
+            })
+
+            if(!promise) {
+                unauthorizedResponse(res, "Wrong auth token");
+                return;
+            }
+
+            if(!promise.valid){
+                unauthorizedResponse(res, "Auth token invalided");
+                return;
+            }
+
+            if(new Date().getTime() >= promise.expireDate){
+                unauthorizedResponse(res, "Auth token expired");
+                return;
+            }
+
+            const discordID = typeof promise.discordUSERID === "string" ? promise.discordUSERID : ""
+
             req.authorization = payload;
             next();
         } else {
