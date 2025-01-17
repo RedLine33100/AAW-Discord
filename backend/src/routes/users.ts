@@ -1,8 +1,8 @@
 import {Router} from "express";
 import {param, query, validationResult} from "express-validator";
-import {jwtAuth} from "../jwt.js";
 import {findUsersByName, getUserById, getUsers} from "../datasource/user.js";
 import {User} from "../types/user.js";
+import {userJwtAuth} from "../middleware/auth.js";
 
 export default Router()
 
@@ -31,7 +31,7 @@ export default Router()
     })
 
     // Get information about authenticated user
-    .get("/me", jwtAuth, (req, res) => {
+    .get("/me", userJwtAuth, (req, res) => {
         getUserById(req.authorization.id)
             .then((user?: User) => {
                 if (user) {

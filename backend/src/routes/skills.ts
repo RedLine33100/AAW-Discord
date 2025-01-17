@@ -1,10 +1,10 @@
 import {Router} from "express";
 import {body, validationResult} from "express-validator";
-import {jwtAuth} from "../jwt.js";
 import {getSkills, SetSkillResult, setSkill} from "../datasource/skill.js";
 import {getUserById} from "../datasource/user.js";
 import {User} from "../types/user.js";
 import bodyParser from "body-parser";
+import {userJwtAuth} from "../middleware/auth.js";
 
 export default Router()
 
@@ -19,7 +19,7 @@ export default Router()
     })
 
     // Get authenticated user's skills
-    .get("/my", jwtAuth, (req, res) => {
+    .get("/my", userJwtAuth, (req, res) => {
         getUserById(req.authorization.id)
             .then((user?: User) => {
                 if (user) {
@@ -36,7 +36,7 @@ export default Router()
 
     // Set a skill for authenticated user
     .put("/my",
-        jwtAuth,
+        userJwtAuth,
         bodyParser.json(),
         body("name").notEmpty().isLength({max:100}),
         body("grade").isInt({min: 0, max: 10}).toInt(),
@@ -63,7 +63,7 @@ export default Router()
 
     // Remove a skill for authenticated user
     .delete("/my",
-        jwtAuth,
+        userJwtAuth,
         bodyParser.text(),
         body().notEmpty().isLength({max:100}),
         (req, res) => {
