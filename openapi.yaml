@@ -53,6 +53,8 @@ paths:
     description: Get or manage authenticated user's skills
     get:
       summary: Get authenticated user's skills
+      security:
+        - user: [ ]
       responses:
         200:
           description: List of skills with associated grade
@@ -64,6 +66,8 @@ paths:
                   $ref: "#/components/schemas/user_skill"
     put:
       summary: Set a skill for authenticated user
+      security:
+        - user: [ ]
       requestBody:
         content:
           "application/json":
@@ -78,6 +82,8 @@ paths:
           description: Unknown skill.
     delete:
       summary: Remove a skill for authenticated user
+      security:
+        - user: [ ]
       requestBody:
         content:
           "text/plain":
@@ -136,6 +142,8 @@ paths:
   "/users/me":
     get:
       summary: Get information about authenticated user
+      security:
+        - user: [ ]
       responses:
         200:
           description: Information about authenticated user
@@ -159,6 +167,31 @@ paths:
       responses:
         200:
           description: User information
+
+  "/users/{discord_id}/skills":
+    put:
+      summary: Set a skill for given user
+      description: (this endpoint can be used by the bot only)
+      security:
+        - bot: [ ]
+      parameters:
+        - name: discord_id
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/user_skill'
+      responses:
+        200:
+          description: Update successful.
+        400:
+          description: Invalid request body.
+        404:
+          description: Unknown skill or user.
 
 
 
@@ -221,3 +254,13 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/user_skill"
+  securitySchemes:
+    user:
+      type: http
+      scheme: bearer
+      description: JSON Web Token obtained using `/auth` endpoint
+    bot:
+      type: http
+      scheme: basic
+      description: |
+        `bot:<password>`, encoded as Base64, where `<password>` value is defined in backend `.env` file

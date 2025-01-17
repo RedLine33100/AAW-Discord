@@ -95,6 +95,7 @@ export function getUserById(discordId: string): Promise<User | undefined> {
 
                 const userRow = usersValueRange.find(row => row[Column.N_DISCORD_ID] === discordId);
                 resolve(userRow ? mapToUser(userRow, skills) : undefined);
+                return;
             }
             resolve(undefined);
         }).catch(reject);
@@ -115,6 +116,7 @@ function getRowIndexForUser(discordId: string): Promise<number> {
             if (values) {
                 const index = values.indexOf(discordId);
                 resolve(index >= 0 ? index + 2 : -1);
+                return;
             }
             resolve(-1);
         }).catch(reject);
