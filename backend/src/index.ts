@@ -9,6 +9,7 @@ const app = express();
 
 const API_ROOT_ENDPOINT = "/api/v1";
 
+app.set("x-powered-by", false);
 app.use((req, res, next) => {
     if (process.env.ACCESS_CONTROL_ALLOW_ORIGIN) {
         res.setHeader("Access-Control-Allow-Origin", process.env.ACCESS_CONTROL_ALLOW_ORIGIN);
