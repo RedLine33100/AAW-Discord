@@ -3,7 +3,10 @@ import {query, validationResult} from "express-validator";
 import axios from "axios";
 import {AUTH_COOKIE, signJWT} from "../jwt.js";
 import {insertUserIfNotExist} from "../datasource/user.js";
+import {Document, MongoClient, ObjectId, OptionalId} from 'mongodb';
+import {MongoManager} from "../datasource/mongomanager.js";
 
+var mongo = new MongoManager();
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 const DISCORD_USER_DATA_URL = "https://discord.com/api/v10/users/@me";
@@ -57,10 +60,23 @@ export default Router()
                             }
                         }
                     );
+                    var expire = new Date();
+                    expire.setDate(expire.getDate() + 24 * 60 * 60 * 1000);
+
+                    var id : ObjectId | null = await mongo.insertData("user_auth", "token", {
+                        discordUSERID: userDataResponse.data.id,
+                        expireDate: expire.getTime(),
+                        valid: true,
+                    })
+
+                    if(id == null){
+                        throw new Error("DB insert error");
+                    }
 
                     // JSON Web Token
                     const jwt = await signJWT({
                         id: userDataResponse.data.id,
+                        tokenID: id.toString(),
                         username: userDataResponse.data.username
                     });
 
@@ -68,8 +84,6 @@ export default Router()
                         httpOnly: true,
                         maxAge: 24 * 60 * 60 * 1000,
                     });
-
-                    // TODO other things... (create session ID...)
 
                     await insertUserIfNotExist(userDataResponse.data.username, userDataResponse.data.id)
                 } catch(reason) {
