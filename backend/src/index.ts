@@ -1,3 +1,7 @@
+import {MongoManager} from "./datasource/mongomanager.js";
+
+export const MONGO_MANAGER = new MongoManager();
+
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import skillsRouter from "./routes/skills.js";
