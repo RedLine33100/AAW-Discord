@@ -51,8 +51,10 @@ export async function getSession(sessionid:string) : Promise<Session | undefined
 
 export async function updateSession(sessionid: string, session:Document) : Promise<Session | undefined> {
     return new Promise<Session | undefined>(async (resolve, reject) => {
-        const result = await MONGO_MANAGER.updateOneByElement("user_auth", "token", {_id:new ObjectId(sessionid)}, session)
+        const result = await MONGO_MANAGER.updateOneByElement("user_auth", "token", {_id:{$eq:new ObjectId(sessionid)}}, session)
+        console.log(result)
         if(!result){
+            console.log("undefined")
             resolve(undefined);
             return;
         }

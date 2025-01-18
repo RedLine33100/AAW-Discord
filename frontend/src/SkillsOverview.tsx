@@ -34,9 +34,6 @@ function SkillsOverview() {
                     {
                         method: "GET",
                         credentials: "include",
-                        headers: {
-                            Authorization: `Bearer YOUR_ACCESS_TOKEN`,
-                        },
                     }
                 );
 

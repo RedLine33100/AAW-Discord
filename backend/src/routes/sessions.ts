@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {body, param, query, validationResult} from "express-validator";
 import {deleteSession, getSession, searchSessions, updateSession} from "../datasource/session.js";
+import bodyParser from "body-parser";
 
 export default Router()
 
@@ -42,13 +43,14 @@ export default Router()
             }
         })
 
-    .put("/",
-        body("id").notEmpty().isLength({max:50}),
+    .put("/:sessionID",
+        bodyParser.json(),
+        param("sessionID").notEmpty().isLength({max:50}),
         (req, res) => {
             const result = validationResult(req);
 
             if (result.isEmpty()) {
-                updateSession(req.body.id, req.body).then(updateSession => {
+                updateSession(req.params!.sessionID, req.body).then(updateSession => {
                     if(updateSession){
                         res.status(200).send(updateSession);
                         return

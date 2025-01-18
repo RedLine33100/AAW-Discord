@@ -81,6 +81,9 @@ function App() {
                         {isAuthenticated && (
                             <Link to="/my-skills" className="header-title">MySkills</Link>
                         )}
+                        {isAuthenticated && (
+                            <Link to="/all-users" className="header-title">Manage Sessions</Link>
+                        )}
                     </div>
                     <div className="header-right">
                         <nav>

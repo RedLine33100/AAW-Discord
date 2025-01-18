@@ -4,7 +4,7 @@ import {getSkills, SetSkillResult, setSkill} from "../datasource/skill.js";
 import {getUserById} from "../datasource/user.js";
 import {User} from "../types/user.js";
 import bodyParser from "body-parser";
-import {userJwtAuth} from "../middleware/auth.js";
+import {botBasicAuth, userJwtAuth} from "../middleware/auth.js";
 
 export default Router()
 
@@ -55,6 +55,33 @@ export default Router()
                         console.error(err);
                         res.status(500).end();
                     });
+            } else {
+                res.status(400).send({error: result.array()});
+            }
+        }
+    )
+
+    .put("/my/bot",
+        botBasicAuth,
+        bodyParser.json(),
+        body("discordID").notEmpty().isLength({max:100}),
+        body("name").notEmpty().isLength({max:100}),
+        body("grade").isInt({min: 0, max: 10}).toInt(),
+        (req, res) => {
+            const result = validationResult(req);
+
+            if (result.isEmpty()) {
+                setSkill(req.body.discordID, req.body.name, req.body.grade)
+                    .then(result => {
+                        if (result === SetSkillResult.SUCCESS) {
+                            res.status(200).end();
+                        } else {
+                            res.status(404).send({error: result});
+                        }
+                    }).catch(err => {
+                    console.error(err);
+                    res.status(500).end();
+                });
             } else {
                 res.status(400).send({error: result.array()});
             }

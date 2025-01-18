@@ -18,7 +18,7 @@ function UserSessions() {
     useEffect(() => {
         const fetchSessions = async () => {
             try {
-                const response = await fetch(`${BACKEND_URL}/users`, {
+                const response = await fetch(`${BACKEND_URL}/sessions/search/${userId}`, {
                     method: "GET",
                     credentials: "include",
                 });
@@ -35,14 +35,15 @@ function UserSessions() {
         }
 
         fetchSessions();
-    })
+    }, [])
 
-    const updateSessionValidity = async (id: string, valid: boolean) => {
+    const updateSessionValidity = async (sess: Session, validValue: boolean) => {
         try {
-            const response = await fetch(`${BACKEND_URL}/sessions`, {
+            sess.valid = validValue;
+            const response = await fetch(`${BACKEND_URL}/sessions/${sess._id}`, {
                 method: "PUT",
                 credentials: "include",
-                body: JSON.stringify({ id, valid }),
+                body: JSON.stringify(validValue),
             });
 
             if (!response.ok) {
@@ -75,6 +76,7 @@ function UserSessions() {
             <table className="user-sessions-table">
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Expire</th>
                     <th>Valid</th>
                     <th>Supprimer</th>
@@ -83,9 +85,10 @@ function UserSessions() {
                 <tbody>
                 {sessions.map((session) => (
                     <tr key={session._id}>
-                        <td>{new Date(session.expireDate).toISOString()}</td>
-                        <td><input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" checked={session.valid} onChange={event => updateSessionValidity(session._id, event.target.checked)}/></td>
-                        <td><button type="button" id="exampleCheckbox" name="exampleCheckbox" onClick={() => deleteSession(session._id)}>Supprimer</button></td>
+                        <td>{session._id}</td>
+                        <td>{session.expireDate}</td>
+                        <td><input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" checked={session.valid} onChange={event => updateSessionValidity(session, event.target.checked)}/></td>
+                        <td><button type="button" id="ex2" name="exampleCheckbox" onClick={() => deleteSession(session._id)}>Supprimer</button></td>
                     </tr>
                 ))}
                 </tbody>
