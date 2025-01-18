@@ -83,7 +83,7 @@ export default Router()
                     console.log("SENDONG COOKIES");
 
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
-                        httpOnly: false,
+                        httpOnly: true,
                         maxAge: 24 * 60 * 60 * 1000,
                     });
 
