@@ -82,10 +82,11 @@ export default Router()
 
                     console.log("SENDONG COOKIES");
                     res.setHeader("Access-Control-Expose-Headers", "Set-Cookie")
-                    res.setHeader("withCredentials", "true")
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
+                        sameSite: "none",
+                        domain: "aaw.ngimenez.fr"
                     });
 
                     // Insert in Google Sheets
