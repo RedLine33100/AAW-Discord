@@ -1,4 +1,4 @@
-FROM node
+FROM node:20.18-alpine
 
 WORKDIR /app/backend
 
@@ -14,4 +14,4 @@ EXPOSE 8000
 
 ENV HOST=0.0.0.0 PORT=8000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start", "--env-file"]

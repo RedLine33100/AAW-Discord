@@ -1,7 +1,10 @@
 import {Router} from "express";
-import {param, query, validationResult} from "express-validator";
-import {jwtAuth} from "../jwt.js";
+import {body, param, query, validationResult} from "express-validator";
 import {findUsersByName, getUserById, getUsers} from "../datasource/user.js";
+import {User} from "../types/user.js";
+import {botBasicAuth, userJwtAuth} from "../middleware/auth.js";
+import bodyParser from "body-parser";
+import {setSkill, SetSkillResult} from "../datasource/skill.js";
 
 export default Router()
 
@@ -30,9 +33,19 @@ export default Router()
     })
 
     // Get information about authenticated user
-    // TODO Implementation
-    .get("/me", jwtAuth, (req, res) => {
-        res.status(500).send(req.authorization);
+    .get("/me", userJwtAuth, (req, res) => {
+        getUserById(req.authorization.id)
+            .then((user?: User) => {
+                if (user) {
+                    res.send(user);
+                } else {
+                    res.status(500).end();
+                }
+            }).catch(reason => {
+                console.log(reason);
+                res.status(500).end();
+            }
+        );
     })
 
     // Find users by name
@@ -81,4 +94,32 @@ export default Router()
             } else {
                 res.status(400).send({error: result.array()});
             }
-    });
+    })
+
+    // Set a skill for given user
+    .put("/:discordId/skills",
+        botBasicAuth,
+        bodyParser.json(),
+        param("discordId").isNumeric(),
+        body("name").notEmpty().isLength({max:100}),
+        body("grade").isInt({min: 0, max: 10}).toInt(),
+        (req, res) => {
+            const result = validationResult(req);
+
+            if (result.isEmpty()) {
+                setSkill(req.params.discordId, req.body.name, req.body.grade)
+                    .then(result => {
+                        if (result === SetSkillResult.SUCCESS) {
+                            res.status(200).end();
+                        } else {
+                            res.status(404).send({error: result});
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                        res.status(500).end();
+                    });
+            } else {
+                res.status(400).send({error: result.array()});
+            }
+        }
+    );

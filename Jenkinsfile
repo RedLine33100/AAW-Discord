@@ -11,12 +11,14 @@ pipeline{
             sh 'docker stop apibackend || true'
             sh 'docker rm apibackend || true'
             script {
-              img = docker.build("test")
+              img = docker.build("apibackendi")
               
               echo "B2"
               img.tag("apibackend")
               echo "B3"
-              img.run("--name apibackend -p 8000:8000")
+              sh 'cp /var/docker/backend/.env '+workspace+'/backend'
+              sh 'docker run -d --restart always --name apibackend -p 8000:8000 apibackendi'
+              //img.run("--name apibackend -p 8000:8000 .)
               echo "B4"
             }
             //sh 'sudo docker build --tag "aaw-backend" .'
@@ -25,12 +27,13 @@ pipeline{
             sh 'docker stop aawfrontend || true'
             sh 'docker rm aawfrontend || true'
             script {
-              img = docker.build("test")
+              img = docker.build("aawfrontendi")
               
               echo "C2"
               img.tag("aawfrontend")
               echo "C3"
-              img.run("--name aawfrontend -p 3777:3777")
+              sh 'cp /var/docker/frontend/.env '+workspace+'/frontend'
+              sh 'docker run -d --restart always --name aawfrontend -p 3777:3777 aawfrontendi'
               echo "C4"
             }
           }

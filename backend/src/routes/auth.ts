@@ -2,7 +2,9 @@ import {Router} from "express";
 import {query, validationResult} from "express-validator";
 import axios from "axios";
 import {AUTH_COOKIE, signJWT} from "../jwt.js";
-import {MongoManager} from "../datasource/MongoManager.js";
+import {insertUserIfNotExist} from "../datasource/user.js";
+import {ObjectId} from 'mongodb';
+import {MONGO_MANAGER} from "../index.js";
 
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
@@ -81,10 +83,19 @@ export default Router()
                         username: userDataResponse.data.username
                     });
 
+                    console.log("SENDONG COOKIES");
+                    res.setHeader("Access-Control-Expose-Headers", "Set-Cookie")
+                    res.setHeader('Access-Control-Allow-Credentials', "true");
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
-                        httpOnly: true,
+                        httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
                     });
+
+                    // Insert in Google Sheets
+                    await insertUserIfNotExist(userDataResponse.data.username, userDataResponse.data.id);
+                    res.redirect(redirectUrl.toString());
+                    return;
+
                 } catch(reason) {
                     console.error(reason);
                     res.status(500).send("Internal Server Error");

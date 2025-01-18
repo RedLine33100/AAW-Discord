@@ -4,7 +4,7 @@ const auth = new google.auth.GoogleAuth({
     credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
         client_id: process.env.GOOGLE_CLIENT_ID,
-        private_key: process.env.GOOGLE_PRIVATE_KEY,
+        private_key: (process.env.GOOGLE_PRIVATE_KEY || "n" ).split(String.raw`\n`).join('\n'),
     },
     scopes: [
         'https://www.googleapis.com/auth/spreadsheets'
@@ -28,3 +28,4 @@ export namespace Column {
 }
 
 export const SKILLS_RANGE = `${Column.A_FIRST_SKILL_COLUMN}1:1`;
+export const DISCORD_ID_RANGE = `${Column.A_DISCORD_ID}2:${Column.A_DISCORD_ID}`;

@@ -10,8 +10,13 @@
     "preview": "vite preview --port 3777 --host"
   },
   "dependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "js-cookie": "^3.0.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-cookie": "^7.2.2",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.2",
+    "typescript-cookie": "^1.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
