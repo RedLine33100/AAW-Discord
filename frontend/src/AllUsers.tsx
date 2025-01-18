@@ -20,7 +20,7 @@ function AllUsers() {
         const fetchUsers = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${BACKEND_URL}/users?limit=50`, {
+                const response = await fetch(`${BACKEND_URL}/users?limit=80`, {
                     method: "GET",
                     credentials: "include",
                 });
