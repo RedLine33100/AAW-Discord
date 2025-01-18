@@ -56,6 +56,9 @@ function App() {
     };
     const logout = () => {
         localStorage.clear();
+        setCookies("auth", false);
+        setCookies("username", null);
+        setUserName(null)
         setIsAuthenticated(false)
     }
 
