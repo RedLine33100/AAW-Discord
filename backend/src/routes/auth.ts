@@ -86,7 +86,6 @@ export default Router()
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
                         sameSite: "none",
-                        domain: "aaw.ngimenez.fr"
                     });
 
                     // Insert in Google Sheets
