@@ -66,16 +66,19 @@ import UserSessions from "./UserSessions.tsx";
 
 
 import {useEffect, useState} from "react";
-import { CookiesProvider, useCookies } from 'react-cookie'
+import { useCookies } from 'react-cookie'
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
-    const [token, setToken] = useCookies()
+
+
+    const [cookies] = useCookies(['access_token']);
+
 
     useEffect(() => {
         const checkAuth = async () => {
-            console.log(token)
-            if (token) {
+            console.log(cookies['access_token']);
+            if (false) {
                 try {
                     const response = await fetch(`${BACKEND_URL}/users/me`, {
                         method: "GET",
@@ -108,7 +111,6 @@ function App() {
     };
 
     return (
-        <CookiesProvider>
         <Router>
             <div className="App">
                 <header className="header">
@@ -183,7 +185,6 @@ function App() {
                 </main>
             </div>
         </Router>
-        </CookiesProvider>
     );
 }
 export default App
