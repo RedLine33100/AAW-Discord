@@ -85,6 +85,7 @@ export default Router()
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
+                        domain: "aaw.ngimenez.fr",
                     });
 
                     // Insert in Google Sheets
