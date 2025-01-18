@@ -55,3 +55,10 @@ In the `backend` directory, create a `.env` file containing the following enviro
 
 
 To get Google credentials: <https://console.cloud.google.com/apis/credentials>. Generate a credentials JSON file and copy the relevant values in the `.env` file.
+
+
+###Access
+You can access the web server with https://aaw.ngimenez.fr/
+You can call the api with https://aawapi.ngimenez.fr/
+Link to the sheet: https://docs.google.com/spreadsheets/d/12IlZ5US1jQOlQBFj8L1ivkTPtNpEl2uJPygO7L_Y3dI/edit?gid=0#gid=0
+And link to install the bot: https://discord.com/oauth2/authorize?client_id=1296087634237456455
