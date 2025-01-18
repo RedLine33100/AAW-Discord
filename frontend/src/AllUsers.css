@@ -1,0 +1,45 @@
+.all-users-container {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.all-users-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.all-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.all-users-table th,
+.all-users-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    color: black;
+}
+
+.all-users-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: black;
+}
+
+.edit-button {
+    padding: 5px 10px;
+    background-color: #6943ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+    background-color: #5633cc;
+}

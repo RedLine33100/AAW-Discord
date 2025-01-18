@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+/*import {BrowserRouter as Router, Routes, Route, Link, } from 'react-router-dom';
 import SkillsOverview from './SkillsOverview';
 
 import './App.css';
@@ -8,9 +8,12 @@ import {BACKEND_URL} from "./util"
 
 
 
+import AllUsers from "./AllUsers.tsx";
+import UserSessions from "./UserSessions.tsx";
+
 function App() {
 
-    return (
+   return (
     <Router>
         <div className="App">
             <header className="header">
@@ -37,18 +40,34 @@ function App() {
                     <Route path="/skills-overview" element={<SkillsOverview/>}/>
                     <Route path="/my-skills" element={<MySkills/>}/>
                     <Route path="/user/:userName" element={<UserSkills/>}/>
-                </Routes>
+                    <Route path="/all-users" element={<AllUsers /> }/>
+                        <Route path="/user-sessions/:userId" element={<UserSessions /> } /></Routes>
             </main>
-        </div>
-    </Router>
+            </div>
+         </Router>
 );
 
 }
 export default App
+*/
 
-  /*  import {useEffect, useState} from "react";
-    import Cookies from 'js-cookie';
+import {BrowserRouter as Router, Routes, Route, Link, Navigate,} from 'react-router-dom';
+import SkillsOverview from './SkillsOverview';
 
+import './App.css';
+import MySkills from "./MySkills.tsx";
+import UserSkills from "./UserSkills.tsx";
+import {BACKEND_URL} from "./util"
+
+
+
+import AllUsers from "./AllUsers.tsx";
+import UserSessions from "./UserSessions.tsx";
+
+
+import {useEffect, useState} from "react";
+import { CookiesProvider, useCookies } from 'react-cookie'
+function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
 
@@ -84,7 +103,7 @@ export default App
         checkAuth();
     }, []);
     const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-        return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+        return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
 
     return (
@@ -142,6 +161,22 @@ export default App
                                 </ProtectedRoute>
                             }
                         />
+                        <Route
+                            path="/all-users"
+                            element={
+                                <ProtectedRoute>
+                                    <AllUsers />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/user-sessions/:userId"
+                            element={
+                                <ProtectedRoute>
+                                    <UserSessions />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                 </main>
             </div>
@@ -150,5 +185,5 @@ export default App
 }
 export default App
 
-*/
+
 
