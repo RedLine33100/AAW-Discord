@@ -26,7 +26,6 @@ function App() {
 
     useEffect(() => {
         const checkAuth = async () => {
-            if (cookies['access_token']) {
                 try {
                     const response = await fetch(`${BACKEND_URL}/users/me`, {
                         method: "GET",
@@ -47,10 +46,6 @@ function App() {
                     console.error("Error during authentication check:", error);
                     setIsAuthenticated(false);
                 }
-            } else {
-                console.log("No token found");
-                setIsAuthenticated(false);
-            }
         };
 
         checkAuth();
