@@ -29,23 +29,22 @@ function App() {
                         method: "GET",
                         credentials: "include",
                     });
-                    console.log("Response:", response);
                     if (response.ok) {
                         const data = await response.json();
-                        console.log("User Data:", data);
                         setUserName(data.name);
                         setIsAuthenticated(true);
                         setCookies("auth", true);
                         setCookies("username", data.name);
                     } else {
-                        console.error("Failed to authenticate:", response.statusText);
                         setIsAuthenticated(false);
                         setCookies("auth", false);
+                        setCookies("username", null);
                     }
                 } catch (error) {
-                    console.error("Error during authentication check:", error);
+                    console.error(error);
                     setIsAuthenticated(false);
                     setCookies("auth", false);
+                    setCookies("username", null);
                 }
         };
 
