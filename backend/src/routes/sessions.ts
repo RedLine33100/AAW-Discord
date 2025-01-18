@@ -49,7 +49,7 @@ export default Router()
         body("valid").isBoolean(),
         (req, res) => {
             const result = validationResult(req);
-            console.log(req.body.valid);
+
             if (result.isEmpty()) {
                 updateSession(req.params!.sessionID, {valid: req.body.valid}).then(result => {
                     if(result){
