@@ -80,6 +80,8 @@ export default Router()
                         username: userDataResponse.data.username
                     });
 
+                    console.log("SENDONG COOKIES");
+
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
