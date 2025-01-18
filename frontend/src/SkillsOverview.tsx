@@ -30,7 +30,7 @@ function SkillsOverview() {
             try {
                 setLoading(true);
                 const response = await fetch(
-                    `${BACKEND_URL}/users?skills=true`,
+                    `${BACKEND_URL}/users?skills=true&limit=50`,
                     {
                         method: "GET",
                         credentials: "include",
