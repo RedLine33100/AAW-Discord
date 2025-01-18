@@ -17,8 +17,9 @@ import {useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
 
 function App() {
-    const [cookies, setCookies] = useCookies(["auth", "username"]);
+    const [cookies, setCookies] = useCookies(["auth", "username", "admin"]);
     const [isAuthenticated, setIsAuthenticated] = useState(cookies["auth"] || false);
+    const [isAdmin, setIsAdmin] = useState(cookies["admin"] || false);
     const [userName, setUserName] = useState<string | null>(cookies["username"]);
 
     const BACKEND_URL = import.meta.env.VITE_API_BACKEND;
@@ -32,21 +33,20 @@ function App() {
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        console.log(data);
                         setUserName(data.name);
                         setIsAuthenticated(true);
-                        setCookies("auth", true);
+                        setIsAdmin(data.admin);
                         setCookies("username", data.name);
                     } else {
                         setIsAuthenticated(false);
-                        setCookies("auth", false);
                         setCookies("username", null);
+                        setIsAdmin(false);
                     }
                 } catch (error) {
                     console.error(error);
                     setIsAuthenticated(false);
-                    setCookies("auth", false);
                     setCookies("username", null);
+                    setIsAdmin(false);
                 }
         };
 
@@ -54,6 +54,9 @@ function App() {
     }, []);
     const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
+    };
+    const AdminProtected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+        return isAuthenticated && isAdmin ? <>{children}</> : <Navigate to="/" />;
     };
     const logout = async () => {
         try {
@@ -68,10 +71,10 @@ function App() {
             console.error(error);
         }
         localStorage.clear();
-        setCookies("auth", false);
         setCookies("username", null);
         setUserName(null)
         setIsAuthenticated(false)
+        setIsAdmin(false)
     }
 
     return (
@@ -81,7 +84,7 @@ function App() {
                         {isAuthenticated && (
                             <Link to="/my-skills" className="header-title">MySkills</Link>
                         )}
-                        {isAuthenticated && (
+                        {isAuthenticated && isAdmin (
                             <Link to="/all-users" className="header-title">Manage Sessions</Link>
                         )}
                     </div>
@@ -139,17 +142,17 @@ function App() {
                         <Route
                             path="/all-users"
                             element={
-                                <ProtectedRoute>
+                                <AdminProtected>
                                     <AllUsers />
-                                </ProtectedRoute>
+                                </AdminProtected>
                             }
                         />
                         <Route
                             path="/user-sessions/:userId"
                             element={
-                                <ProtectedRoute>
+                                <AdminProtected>
                                     <UserSessions />
-                                </ProtectedRoute>
+                                </AdminProtected>
                             }
                         />
                     </Routes>

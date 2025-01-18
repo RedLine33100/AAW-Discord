@@ -1,5 +1,6 @@
 import {mapToUser, User} from "../types/user.js";
 import {Column, SHEETS, SKILLS_RANGE} from "./google-sheets.js";
+import {MONGO_MANAGER} from "../index.js";
 
 /**
  * **Read-Only**.
@@ -154,4 +155,38 @@ export async function insertUserIfNotExist(username: string, discordId: string) 
     if (index === -1) {
         await insertUser(username, discordId);
     }
+}
+
+/**
+ *
+ */
+export async function isAdmin(discordId: string): Promise<boolean> {
+    return new Promise<boolean>(async (resolve, reject) => {
+        const result = await MONGO_MANAGER.findOneByElement("user", "adminAccess", {discordID: discordId})
+        resolve(result !== null)
+    })
+}
+
+export async function setAdmin(discordId: string, admin:boolean): Promise<void> {
+
+    const curStatus = await isAdmin(discordId);
+
+    if(curStatus == admin) {
+        return;
+    }
+
+    if(admin){ // Insert dans la base
+        await MONGO_MANAGER.insertData("user", "adminAccess", {discordID: discordId});
+    }else{
+        await MONGO_MANAGER.deleteOneByElement("user", "adminAccess", {discordID: discordId});
+    }
+    return;
+}
+
+export async function getAdmins() : Promise<String[]> {
+    const result = await MONGO_MANAGER.findAll("user", "adminAccess")
+    if(result == null){
+        return []
+    }
+    return result.map(doc => doc.discordID);
 }

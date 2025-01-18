@@ -1,4 +1,4 @@
-import { Document, MongoClient, ObjectId, OptionalId, WithId } from 'mongodb';
+import {Document, MongoClient, ObjectId, OptionalId, WithId} from 'mongodb';
 
 export class MongoManager {
 
@@ -34,8 +34,7 @@ export class MongoManager {
     public async findOneByElement(db: string, collection: string, search: Document): Promise<Document | null> {
         try {
             let client = await this.client.connect();
-            const result = await client.db(db).collection(collection).findOne(search);
-            return result;
+            return await client.db(db).collection(collection).findOne(search);
         } catch (e) {
             console.error("Erreur de recherche:", e);
             return null;
@@ -46,8 +45,18 @@ export class MongoManager {
     public async findAllByElement(db: string, collection: string, search: Document): Promise<WithId<Document>[] | null> {
         try {
             let client = await this.client.connect();
-            const result = await client.db(db).collection(collection).find(search).toArray();
-            return result;
+            return await client.db(db).collection(collection).find(search).toArray();
+        } catch (e) {
+            console.error("Erreur de recherche:", e);
+            return null;
+        }
+    }
+
+    // Méthode pour recuperer touts les documents
+    public async findAll(db: string, collection: string): Promise<WithId<Document>[] | null> {
+        try {
+            let client = await this.client.connect();
+            return await client.db(db).collection(collection).find().toArray();
         } catch (e) {
             console.error("Erreur de recherche:", e);
             return null;

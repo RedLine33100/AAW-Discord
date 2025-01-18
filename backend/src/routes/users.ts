@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {body, param, query, validationResult} from "express-validator";
-import {findUsersByName, getUserById, getUsers} from "../datasource/user.js";
+import {findUsersByName, getUserById, getUsers, isAdmin} from "../datasource/user.js";
 import {User} from "../types/user.js";
 import {botBasicAuth, userJwtAuth} from "../middleware/auth.js";
 import bodyParser from "body-parser";
@@ -37,7 +37,10 @@ export default Router()
         getUserById(req.authorization.id)
             .then((user?: User) => {
                 if (user) {
-                    res.send(user);
+                    isAdmin(user.discordId).then(result => {
+                        user.admin = result;
+                        res.send(user);
+                    }).catch(e => res.send(user));
                 } else {
                     res.status(500).end();
                 }

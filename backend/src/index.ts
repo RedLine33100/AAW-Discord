@@ -8,6 +8,7 @@ import skillsRouter from "./routes/skills.js";
 import usersRouter from "./routes/users.js";
 import authRouter from "./routes/auth.js";
 import sessionsRouter from "./routes/sessions.js";
+import adminsRouter from "./routes/admin.js";
 
 const port = process.env.PORT || 8000;
 const app = express();
@@ -32,5 +33,5 @@ app.use(API_ROOT_ENDPOINT + "/auth", authRouter);
 app.use(API_ROOT_ENDPOINT + "/skills", skillsRouter);
 app.use(API_ROOT_ENDPOINT + "/users", usersRouter);
 app.use(API_ROOT_ENDPOINT + "/sessions", sessionsRouter);
-
+app.use(API_ROOT_ENDPOINT + "/admins", adminsRouter);
 app.listen(port, () => console.log(`App listening on port ${port}`));
