@@ -51,6 +51,7 @@ In the `backend` directory, create a `.env` file containing the following enviro
 | `JWT_SECRET`                  | Secret for signing JSON Web Tokens                                                                                                                                                                                                                      |
 | `BOT_SECRET`                  | Password for bot authorization (the username is "bot")                                                                                                                                                                                                  |
 | `ACCESS_CONTROL_ALLOW_ORIGIN` | Value of the [`Access-Control-Allow-Origin header`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) in responses, for instance `https://aaw.ngimenez.fr`. ⚠️ If set to `*`, requests with credentials will fail. |
+| `VITE_API_BACKEND` | Defined by default in frontend/.env , it must be the api address without / at the end |
 
 
 To get Google credentials: <https://console.cloud.google.com/apis/credentials>. Generate a credentials JSON file and copy the relevant values in the `.env` file.
