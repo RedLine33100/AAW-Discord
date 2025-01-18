@@ -35,7 +35,9 @@ function App() {
                         const data = await response.json();
                         setUserName(data.name);
                         setIsAuthenticated(true);
-                        setIsAdmin(data.admin);
+                        if(data.admin)
+                            setIsAdmin(true);
+                        else setIsAdmin(false);
                         setCookies("username", data.name);
                     } else {
                         setIsAuthenticated(false);
@@ -56,7 +58,7 @@ function App() {
         return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
     const AdminProtected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-        return isAuthenticated && isAdmin ? <>{children}</> : <Navigate to="/" />;
+        return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
     const logout = async () => {
         try {
@@ -84,7 +86,7 @@ function App() {
                         {isAuthenticated && (
                             <Link to="/my-skills" className="header-title">MySkills</Link>
                         )}
-                        {isAuthenticated && isAdmin (
+                        {isAuthenticated && isAdmin && (
                             <Link to="/all-users" className="header-title">Manage Sessions</Link>
                         )}
                     </div>
