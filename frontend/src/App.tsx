@@ -27,7 +27,8 @@ function App() {
     if(!cookies['access_token']){
         const token = searchParams.get("token");
         if(token != null){
-            setCookie("access_token", token);
+            setCookie("access_token", token, {sameSite: 'none'});
+            cookies['access_token'] = token;
         }
     }
 
