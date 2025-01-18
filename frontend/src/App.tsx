@@ -15,10 +15,12 @@ import UserSessions from "./UserSessions.tsx";
 
 
 import {useEffect, useState} from "react";
+import {useCookies} from "react-cookie";
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userName, setUserName] = useState<string | null>(null);
+    const [cookies, setCookies] = useCookies(["auth", "username"]);
+    const [isAuthenticated, setIsAuthenticated] = useState(cookies["auth"] || false);
+    const [userName, setUserName] = useState<string | null>(cookies["username"]);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -33,13 +35,17 @@ function App() {
                         console.log("User Data:", data);
                         setUserName(data.name);
                         setIsAuthenticated(true);
+                        setCookies("auth", true);
+                        setCookies("username", data.name);
                     } else {
                         console.error("Failed to authenticate:", response.statusText);
                         setIsAuthenticated(false);
+                        setCookies("auth", false);
                     }
                 } catch (error) {
                     console.error("Error during authentication check:", error);
                     setIsAuthenticated(false);
+                    setCookies("auth", false);
                 }
         };
 
