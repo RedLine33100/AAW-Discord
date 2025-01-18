@@ -38,6 +38,7 @@ function App() {
                         console.log("User Data:", data);
                         setUserName(data.name);
                         setIsAuthenticated(true);
+                        setCookie('access_token', cookies['access_token']);
                     } else {
                         console.error("Failed to authenticate:", response.statusText);
                         setIsAuthenticated(false);
