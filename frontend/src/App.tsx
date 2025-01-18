@@ -1,6 +1,6 @@
 
 
-import {BrowserRouter as Router, Routes, Route, Link, Navigate, useSearchParams,} from 'react-router-dom';
+import {Routes, Route, Link, Navigate, useSearchParams,} from 'react-router-dom';
 import SkillsOverview from './SkillsOverview';
 
 import './App.css';
@@ -71,7 +71,6 @@ function App() {
     }
 
     return (
-        <Router>
             <div className="App">
                 <header className="header">
                     <div className="header-left">
@@ -149,7 +148,6 @@ function App() {
                     </Routes>
                 </main>
             </div>
-        </Router>
     );
 }
 export default App
