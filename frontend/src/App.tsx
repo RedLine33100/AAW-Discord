@@ -1,6 +1,6 @@
 
 
-import {BrowserRouter as Router, Routes, Route, Link, Navigate,} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Link, Navigate, useSearchParams,} from 'react-router-dom';
 import SkillsOverview from './SkillsOverview';
 
 import './App.css';
@@ -18,11 +18,18 @@ import {useEffect, useState} from "react";
 import { useCookies } from 'react-cookie'
 
 function App() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
 
 
     const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
+    if(!cookies['access_token']){
+        const token = searchParams.get("token");
+        if(token != null){
+            setCookie("access_token", token);
+        }
+    }
 
     useEffect(() => {
         const checkAuth = async () => {
