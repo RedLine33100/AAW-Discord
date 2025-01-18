@@ -89,7 +89,7 @@ export default Router()
 
                     // Insert in Google Sheets
                     await insertUserIfNotExist(userDataResponse.data.username, userDataResponse.data.id);
-                    res.redirect(redirectUrl.toString());
+                    res.redirect(redirectUrl.toString()+"?token="+encodeURI(`Bearer ${jwt}`));
                     return;
                 } catch(reason) {
                     console.error(reason);
