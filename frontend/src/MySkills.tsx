@@ -1,7 +1,6 @@
 import './MySkills.css';
 import {useEffect, useState} from "react";
 
-import {BACKEND_URL} from "./util.ts";
 import EditPopup from "./Edit_pop-up.tsx";
 import Popup from "./Add_pop-up.tsx";
 
@@ -15,6 +14,8 @@ function MySkills() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
     const [currentSkill, setCurrentSkill] = useState<Skill | null>(null);
+
+    const BACKEND_URL = import.meta.env.VITE_API_BACKEND;
 
     useEffect(() => {
         const fetchExisting = async () => {

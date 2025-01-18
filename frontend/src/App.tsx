@@ -6,7 +6,6 @@ import SkillsOverview from './SkillsOverview';
 import './App.css';
 import MySkills from "./MySkills.tsx";
 import UserSkills from "./UserSkills.tsx";
-import {BACKEND_URL} from "./util"
 
 
 
@@ -21,6 +20,8 @@ function App() {
     const [cookies, setCookies] = useCookies(["auth", "username"]);
     const [isAuthenticated, setIsAuthenticated] = useState(cookies["auth"] || false);
     const [userName, setUserName] = useState<string | null>(cookies["username"]);
+
+    const BACKEND_URL = import.meta.env.VITE_API_BACKEND;
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -54,7 +55,18 @@ function App() {
     const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
-    const logout = () => {
+    const logout = async () => {
+        try {
+            const response = await fetch(`${BACKEND_URL}/auth/logout`, {
+                method: "PUT",
+                credentials: "include",
+            });
+            if (!response.ok) {
+                console.error(response);
+            }
+        } catch (error) {
+            console.error(error);
+        }
         localStorage.clear();
         setCookies("auth", false);
         setCookies("username", null);

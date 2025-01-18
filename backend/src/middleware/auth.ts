@@ -5,7 +5,7 @@ import {MONGO_MANAGER} from "../index.js";
 
 const UNAUTHORIZED = "Unauthorized";
 
-const BEARER = "bearer";
+export const BEARER = "bearer";
 const BASIC = "basic";
 
 const BOT_USERNAME = "bot";

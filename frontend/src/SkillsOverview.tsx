@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";*/
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "./SkillsOverview.css";
-import {BACKEND_URL} from "./util.ts";
 
 type Skill = {
     name: string;
@@ -22,6 +21,8 @@ function SkillsOverview() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const BACKEND_URL = import.meta.env.VITE_API_BACKEND;
     const [skillNames, setSkillNames] = useState<string[]>([]);
 
     useEffect(() => {

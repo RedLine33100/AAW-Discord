@@ -1,17 +1,17 @@
 import {Router} from "express";
 import {query, validationResult} from "express-validator";
 import axios from "axios";
-import {AUTH_COOKIE, signJWT} from "../jwt.js";
+import {AUTH_COOKIE, decodeJWT, signJWT} from "../jwt.js";
 import {insertUserIfNotExist} from "../datasource/user.js";
-import {ObjectId} from 'mongodb';
+import {Document, ObjectId} from 'mongodb';
 import {MONGO_MANAGER} from "../index.js";
+import {BEARER, userJwtAuth} from "../middleware/auth.js";
+import {updateSession} from "../datasource/session.js";
 
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 const DISCORD_USER_DATA_URL = "https://discord.com/api/v10/users/@me";
 
-var mongo = new MongoManager();
-import {ObjectId} from "mongodb";
 
 export default Router()
 
@@ -25,6 +25,16 @@ export default Router()
         authorizationUrl.searchParams.set("scope", "identify");
 
         res.redirect(authorizationUrl.toString());
+    })
+
+    .put("/logout", userJwtAuth, (req, res) => {
+        const authorization: string = req.headers.authorization ?? req.cookies[AUTH_COOKIE];
+
+        if (authorization && authorization.slice(0, BEARER.length).toLowerCase() === BEARER) {
+            decodeJWT(authorization.split(" ")[1]).then(decodeJWT => {
+                updateSession(<string>decodeJWT.payload.tokenID, {valid:false})
+            })
+        }
     })
 
     // Discord's authorization server redirects the user here. The query string contains the authorization code.
@@ -66,7 +76,7 @@ export default Router()
                     var expire = new Date();
                     expire.setDate(expire.getDate() + 24 * 60 * 60 * 1000);
 
-                    var id : ObjectId | null = await mongo.insertData("user_auth", "token", {
+                    var id : ObjectId | null = await MONGO_MANAGER.insertData("user_auth", "token", {
                         discordUSERID: userDataResponse.data.id,
                         expireDate: expire.getTime(),
                         valid: true,

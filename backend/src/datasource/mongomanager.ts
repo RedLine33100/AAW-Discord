@@ -1,93 +1,85 @@
-import {Document, MongoClient, ObjectId, OptionalId, FindCursor, WithId} from 'mongodb';
+import { Document, MongoClient, ObjectId, OptionalId, WithId } from 'mongodb';
 
 export class MongoManager {
 
-    private uri = "mongodb://" + process.env.MONGO_USER + ":" + encodeURIComponent(process.env.MONGO_PASSWORD || "null") + "@" + process.env.MONGO_URL+"?retryWrites=true&w=majority";
+    private uri = "mongodb://" + process.env.MONGO_USER + ":" + encodeURIComponent(process.env.MONGO_PASSWORD || "null") + "@" + process.env.MONGO_URL + "?retryWrites=true&w=majority";
+    private client: MongoClient;
 
-    private client = new MongoClient(this.uri);
+    constructor() {
+        // Créer une instance du client MongoDB mais ne pas encore le connecter
+        this.client = new MongoClient(this.uri, {});
+    }
 
-    public async listDatabases(client: MongoClient): Promise<void> {
+    // Méthode pour lister les bases de données
+    public async listDatabases(): Promise<void> {
+        let client = await this.client.connect();
         let databasesList = await client.db().admin().listDatabases();
-
         console.log("Databases:");
         databasesList.databases.forEach(db => console.log(` - ${db.name}`));
     };
 
-    constructor() {
-        this.client.connect().then(async client => {
-            console.log("Connected to MongoDB...");
-            await this.listDatabases(client);
-        }).catch((e:any) => {
-            console.error(e);
-            console.log(this.uri);
-        }).finally(async () => this.client.close());
-    }
-
-    public insertData(db: string, collection: string, data: OptionalId<Document>):Promise<ObjectId | null>{
-
-        return this.client.connect().then(client => {
-            return client.db(db).collection(collection).insertOne(data).then(tr => {
-                return tr.insertedId;
-            })
-        }).catch(e => {
-            console.error(e);
+    // Méthode pour insérer des données dans une collection
+    public async insertData(db: string, collection: string, data: OptionalId<Document>): Promise<ObjectId | null> {
+        try {
+            let client = await this.client.connect();
+            const result = await client.db(db).collection(collection).insertOne(data);
+            return result.insertedId;
+        } catch (e) {
+            console.error("Erreur d'insertion:", e);
             return null;
-        }).finally(() => {
-            this.client.close();
-        });
-
+        }
     }
 
-    public findOneByElement(db:string, collection:string,search:Document) : Promise<Document | null> {
-
-        return this.client.connect().then(async client => {
-            return client.db(db).collection(collection).findOne(search)
-        }).catch(e => {
-            console.error(e);
+    // Méthode pour trouver un document selon un critère
+    public async findOneByElement(db: string, collection: string, search: Document): Promise<Document | null> {
+        try {
+            let client = await this.client.connect();
+            const result = await client.db(db).collection(collection).findOne(search);
+            return result;
+        } catch (e) {
+            console.error("Erreur de recherche:", e);
             return null;
-        }).finally(() => {
-            this.client.close();
-        });
-
+        }
     }
 
-    public findAllByElement(db:string, collection:string,search:Document) : Promise<FindCursor<WithId<Document>> | null> {
-
-        return this.client.connect().then(async client => {
-            return client.db(db).collection(collection).find(search)
-        }).catch(e => {
-            console.error(e);
+    // Méthode pour trouver plusieurs documents
+    public async findAllByElement(db: string, collection: string, search: Document): Promise<WithId<Document>[] | null> {
+        try {
+            let client = await this.client.connect();
+            const result = await client.db(db).collection(collection).find(search).toArray();
+            return result;
+        } catch (e) {
+            console.error("Erreur de recherche:", e);
             return null;
-        }).finally(() => {
-            this.client.close();
-        });
-
+        }
     }
 
-    public updateOneByElement(db:string, collection:string,search:Document, updatedListing:Document) : Promise<Document | null> {
-
-        return this.client.connect().then(async client => {
-            return client.db(db).collection(collection).updateOne(search, { $set: updatedListing });
-        }).catch(e => {
-            console.error(e);
+    // Méthode pour mettre à jour un document
+    public async updateOneByElement(db: string, collection: string, search: Document, updatedListing: Document): Promise<Document | null> {
+        try {
+            let client = await this.client.connect();
+            const result = await client.db(db).collection(collection).updateOne(search, { $set: updatedListing });
+            return result.modifiedCount > 0 ? updatedListing : null;
+        } catch (e) {
+            console.error("Erreur de mise à jour:", e);
             return null;
-        }).finally(() => {
-            this.client.close();
-        });
-
+        }
     }
 
-    public deleteOneByElement(db:string, collection:string,search:Document) : Promise<Document | null> {
-
-        return this.client.connect().then(async client => {
-            return client.db(db).collection(collection).deleteOne(search);
-        }).catch(e => {
-            console.error(e);
+    // Méthode pour supprimer un document
+    public async deleteOneByElement(db: string, collection: string, search: Document): Promise<Document | null> {
+        try {
+            let client = await this.client.connect();
+            const result = await client.db(db).collection(collection).deleteOne(search);
+            return result.deletedCount > 0 ? search : null;
+        } catch (e) {
+            console.error("Erreur de suppression:", e);
             return null;
-        }).finally(() => {
-            this.client.close();
-        });
-
+        }
     }
 
+    // Méthode pour fermer la connexion MongoDB
+    public async close(): Promise<void> {
+        await this.client.close();
+    }
 }

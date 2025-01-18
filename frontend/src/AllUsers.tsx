@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AllUsers.css";
-import { BACKEND_URL } from "./util";
 
 type User = {
     name: string;
@@ -13,6 +12,8 @@ function AllUsers() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const BACKEND_URL = import.meta.env.VITE_API_BACKEND;
 
     useEffect(() => {
         const fetchUsers = async () => {

@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./MySkills.css";
 
-import {BACKEND_URL} from "./util.ts";
-
 type Skill = {
     name: string;
     grade: number;
@@ -20,6 +18,7 @@ function UserSkills() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const BACKEND_URL = import.meta.env.VITE_API_BACKEND;
     const API_URL = `${BACKEND_URL}/users/${userName || "unknown"}?skills=true`;
 
     useEffect(() => {
