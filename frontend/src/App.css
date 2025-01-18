@@ -111,11 +111,14 @@ body, html {
 
 
 .header-right nav ul li a.Authetification:hover {
-  color: white;
+  color: #6943ff;
 }
 
 
 main {
   margin-top: 60px;
   padding: 20px;
+}
+.welcome {
+  color:#6943ff;
 }

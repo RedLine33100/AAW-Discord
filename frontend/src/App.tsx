@@ -1,55 +1,4 @@
-/*import {BrowserRouter as Router, Routes, Route, Link, } from 'react-router-dom';
-import SkillsOverview from './SkillsOverview';
 
-import './App.css';
-import MySkills from "./MySkills.tsx";
-import UserSkills from "./UserSkills.tsx";
-import {BACKEND_URL} from "./util"
-
-
-
-import AllUsers from "./AllUsers.tsx";
-import UserSessions from "./UserSessions.tsx";
-
-function App() {
-
-   return (
-    <Router>
-        <div className="App">
-            <header className="header">
-                <div className="header-left">
-                    <Link to="/my-skills" className="header-title">MySkills</Link>
-                </div>
-                <div className="header-right">
-                    <nav>
-                        <ul>
-                            <li>
-                                <Link to="/skills-overview" className="skillsoverview">Skills Overview</Link>
-                            </li>
-                            <li>
-                                <a href={`${BACKEND_URL}/auth`} className="Authetification">
-                                    Log in
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-            <main>
-                <Routes>
-                    <Route path="/skills-overview" element={<SkillsOverview/>}/>
-                    <Route path="/my-skills" element={<MySkills/>}/>
-                    <Route path="/user/:userName" element={<UserSkills/>}/>
-                    <Route path="/all-users" element={<AllUsers /> }/>
-                        <Route path="/user-sessions/:userId" element={<UserSessions /> } /></Routes>
-            </main>
-            </div>
-         </Router>
-);
-
-}
-export default App
-*/
 
 import {BrowserRouter as Router, Routes, Route, Link, Navigate,} from 'react-router-dom';
 import SkillsOverview from './SkillsOverview';
@@ -67,18 +16,17 @@ import UserSessions from "./UserSessions.tsx";
 
 import {useEffect, useState} from "react";
 import { useCookies } from 'react-cookie'
+
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
 
 
-    const [cookies] = useCookies(['access_token']);
-
+    const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
 
     useEffect(() => {
         const checkAuth = async () => {
-            console.log(cookies['access_token']);
-            if (false) {
+            if (cookies['access_token']) {
                 try {
                     const response = await fetch(`${BACKEND_URL}/users/me`, {
                         method: "GET",
@@ -109,6 +57,10 @@ function App() {
     const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
+    const logout = () => {
+        removeCookie('access_token');
+        setIsAuthenticated(false)
+    }
 
     return (
         <Router>
@@ -129,7 +81,12 @@ function App() {
                                 )}
                                 <li>
                                     {isAuthenticated ? (
+                                        <div>
                                         <span className="username">{userName}</span>
+                                        <button onClick={logout}>
+                                            Log Out
+                                        </button>
+                                        </div>
                                     ) : (
                                         <a href={`${BACKEND_URL}/auth`} className="login">Log in</a>
                                     )}
@@ -140,7 +97,7 @@ function App() {
                 </header>
                 <main>
                     <Routes>
-                        <Route path="/" element={<h1>Welcome to the Skills Website</h1>} />
+                        <Route path="/" element={<h1 className={"welcome"}>Welcome to the Skills Website</h1>} />
                         <Route
                             path="/skills-overview"
                             element={
