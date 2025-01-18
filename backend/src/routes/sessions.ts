@@ -46,16 +46,17 @@ export default Router()
     .put("/:sessionID",
         bodyParser.json(),
         param("sessionID").notEmpty().isLength({max:50}),
+        body("valid").isBoolean(),
         (req, res) => {
             const result = validationResult(req);
-
+            console.log(req.body.valid);
             if (result.isEmpty()) {
-                updateSession(req.params!.sessionID, req.body).then(updateSession => {
-                    if(updateSession){
-                        res.status(200).send(updateSession);
+                updateSession(req.params!.sessionID, {valid: req.body.valid}).then(result => {
+                    if(result){
+                        res.status(200).send(result);
                         return
                     }else{
-                        res.status(400).send({error: "Session not found"});
+                        res.status(401).send({error: "Session not found"});
                     }
                 });
             } else {

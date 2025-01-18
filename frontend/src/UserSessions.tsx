@@ -43,7 +43,7 @@ function UserSessions() {
             const response = await fetch(`${BACKEND_URL}/sessions/${sess._id}`, {
                 method: "PUT",
                 credentials: "include",
-                body: JSON.stringify(validValue),
+                body: JSON.stringify({valid: validValue}),
             });
 
             if (!response.ok) {
@@ -87,7 +87,7 @@ function UserSessions() {
                     <tr key={session._id}>
                         <td>{session._id}</td>
                         <td>{session.expireDate}</td>
-                        <td><input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" checked={session.valid} onChange={event => updateSessionValidity(session, event.target.checked)}/></td>
+                        <td><input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" checked={session.valid} onChange={() => updateSessionValidity(session, !session.valid)}/></td>
                         <td><button type="button" id="ex2" name="exampleCheckbox" onClick={() => deleteSession(session._id)}>Supprimer</button></td>
                     </tr>
                 ))}

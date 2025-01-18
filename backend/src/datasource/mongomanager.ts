@@ -58,7 +58,9 @@ export class MongoManager {
     public async updateOneByElement(db: string, collection: string, search: Document, updatedListing: Document): Promise<Document | null> {
         try {
             let client = await this.client.connect();
-            const result = await client.db(db).collection(collection).updateOne(search, { $set: updatedListing });
+            console.log(updatedListing)
+            const result = await client.db(db).collection(collection).updateOne(search, {$set:updatedListing});
+            console.log("Update result:", result);
             return result.modifiedCount > 0 ? updatedListing : null;
         } catch (e) {
             console.error("Erreur de mise à jour:", e);
