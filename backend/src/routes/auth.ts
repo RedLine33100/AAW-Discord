@@ -85,7 +85,6 @@ export default Router()
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
-                        sameSite: "none",
                     });
 
                     // Insert in Google Sheets
