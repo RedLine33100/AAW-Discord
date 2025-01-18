@@ -70,10 +70,11 @@ import { CookiesProvider, useCookies } from 'react-cookie'
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
+    const [token, setToken] = useCookies()
 
     useEffect(() => {
         const checkAuth = async () => {
-            const token = Cookies.get("access_token");
+            console.log(token)
             if (token) {
                 try {
                     const response = await fetch(`${BACKEND_URL}/users/me`, {
@@ -107,6 +108,7 @@ function App() {
     };
 
     return (
+        <CookiesProvider>
         <Router>
             <div className="App">
                 <header className="header">
@@ -181,6 +183,7 @@ function App() {
                 </main>
             </div>
         </Router>
+        </CookiesProvider>
     );
 }
 export default App

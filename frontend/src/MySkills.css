@@ -1,0 +1,131 @@
+/* Section principale */
+.my-skills {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 20px;
+    margin-top: 60px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: calc(100vh - 60px);
+    box-sizing: border-box;
+}
+
+/* En-tête */
+.my-skills-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Bouton d'ajout */
+.add-button {
+    color: white;
+    background-color: #6943ff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-button:hover {
+    background: #5639cc;
+}
+
+/* Liste des compétences */
+.skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    width: 100%;
+    padding: 0;
+}
+
+/* Élément individuel */
+.skill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Nom de la compétence */
+.skill-name {
+    flex: 2;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+/* Conteneur de la barre de progression */
+.progress-bar-container {
+    flex: 5;
+    background: #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 15px;
+    margin: 0 15px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* Niveau de la compétence */
+.skill-level {
+    flex: 0.5;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Boutons d'action */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #6943ff;
+    transition: color 0.3s ease;
+}
+
+.action-button:hover {
+    color: #5639cc;
+}
+
+.action-button.delete {
+    color: red;
+}
+
+.action-button.delete:hover {
+    color: darkred;
+}
