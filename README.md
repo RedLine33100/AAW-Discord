@@ -1,5 +1,10 @@
 # AAW-Skills
 
+* API (backend): Axel Leblanc
+    * Session management with MongoDB: Nino Gimenez
+* Discord Bot: Nino Gimenez
+* Frontend: Diewertje Van Dam
+
 ## Project structure
 
 ```text
