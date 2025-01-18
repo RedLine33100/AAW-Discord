@@ -1,4 +1,4 @@
-import {Document, MongoClient, ObjectId, OptionalId} from 'mongodb';
+import {Document, MongoClient, ObjectId, OptionalId, FindCursor, WithId} from 'mongodb';
 
 export class MongoManager {
 
@@ -42,6 +42,19 @@ export class MongoManager {
 
         return this.client.connect().then(async client => {
             return client.db(db).collection(collection).findOne(search)
+        }).catch(e => {
+            console.error(e);
+            return null;
+        }).finally(() => {
+            this.client.close();
+        });
+
+    }
+
+    public findAllByElement(db:string, collection:string,search:Document) : Promise<FindCursor<WithId<Document>> | null> {
+
+        return this.client.connect().then(async client => {
+            return client.db(db).collection(collection).find(search)
         }).catch(e => {
             console.error(e);
             return null;
