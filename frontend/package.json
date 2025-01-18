@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview --port 3777 --host --env-file .env"
+    "preview": "vite preview --port 3777 --host"
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
