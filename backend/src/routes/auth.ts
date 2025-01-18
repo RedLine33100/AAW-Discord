@@ -82,6 +82,7 @@ export default Router()
 
                     console.log("SENDONG COOKIES");
                     res.setHeader("Access-Control-Expose-Headers", "Set-Cookie")
+                    res.setHeader('Access-Control-Allow-Credentials', "true");
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
@@ -89,7 +90,7 @@ export default Router()
 
                     // Insert in Google Sheets
                     await insertUserIfNotExist(userDataResponse.data.username, userDataResponse.data.id);
-                    res.redirect(redirectUrl.toString()+"?token="+encodeURI(`Bearer ${jwt}`));
+                    res.redirect(redirectUrl.toString());
                     return;
                 } catch(reason) {
                     console.error(reason);
