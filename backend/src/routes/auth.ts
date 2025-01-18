@@ -83,12 +83,13 @@ export default Router()
                         username: userDataResponse.data.username
                     });
 
-                    console.log("SENDONG COOKIES");
+                    // Set authorization cookie
                     res.setHeader("Access-Control-Expose-Headers", "Set-Cookie")
                     res.setHeader('Access-Control-Allow-Credentials', "true");
                     res.cookie(AUTH_COOKIE, `Bearer ${jwt}`, {
                         httpOnly: false,
                         maxAge: 24 * 60 * 60 * 1000,
+                        domain: process.env.COOKIE_DOMAIN ?? "http://localhost",
                     });
 
                     // Insert in Google Sheets
