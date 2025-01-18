@@ -18,7 +18,7 @@ import {useEffect, useState} from "react";
 import { useCookies } from 'react-cookie'
 
 function App() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
 
