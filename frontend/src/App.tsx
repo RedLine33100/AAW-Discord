@@ -15,14 +15,10 @@ import UserSessions from "./UserSessions.tsx";
 
 
 import {useEffect, useState} from "react";
-import { useCookies } from 'react-cookie'
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
-
-
-    const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -37,7 +33,6 @@ function App() {
                         console.log("User Data:", data);
                         setUserName(data.name);
                         setIsAuthenticated(true);
-                        setCookie('access_token', cookies['access_token']);
                     } else {
                         console.error("Failed to authenticate:", response.statusText);
                         setIsAuthenticated(false);
@@ -54,7 +49,6 @@ function App() {
         return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
     const logout = () => {
-        removeCookie('access_token');
         setIsAuthenticated(false)
     }
 
