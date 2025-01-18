@@ -49,6 +49,7 @@ function App() {
         return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
     };
     const logout = () => {
+        localStorage.removeItem("access_token");
         setIsAuthenticated(false)
     }
 
