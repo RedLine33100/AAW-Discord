@@ -56,7 +56,7 @@ export default Router()
                         res.status(200).send(result);
                         return
                     }else{
-                        res.status(401).send({error: "Session not found"});
+                        res.status(404).send({error: "Session not found"});
                     }
                 });
             } else {

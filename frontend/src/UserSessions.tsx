@@ -40,10 +40,14 @@ function UserSessions() {
     const updateSessionValidity = async (sess: Session, validValue: boolean) => {
         try {
             sess.valid = validValue;
+
             const response = await fetch(`${BACKEND_URL}/sessions/${sess._id}`, {
                 method: "PUT",
                 credentials: "include",
                 body: JSON.stringify({valid: validValue}),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             });
 
             if (!response.ok) {
