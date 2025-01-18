@@ -5,9 +5,13 @@ import {AUTH_COOKIE, signJWT} from "../jwt.js";
 import {insertUserIfNotExist} from "../datasource/user.js";
 import {ObjectId} from 'mongodb';
 import {MONGO_MANAGER} from "../index.js";
+
 const DISCORD_AUTHORIZATION_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 const DISCORD_USER_DATA_URL = "https://discord.com/api/v10/users/@me";
+
+var mongo = new MongoManager();
+import {ObjectId} from "mongodb";
 
 export default Router()
 
@@ -59,17 +63,16 @@ export default Router()
                         }
                     );
 
-                    // Insert in DB
-                    const expire = new Date();
+                    var expire = new Date();
                     expire.setDate(expire.getDate() + 24 * 60 * 60 * 1000);
 
-                    const id : ObjectId | null = await MONGO_MANAGER.insertData("user_auth", "token", {
+                    var id : ObjectId | null = await mongo.insertData("user_auth", "token", {
                         discordUSERID: userDataResponse.data.id,
                         expireDate: expire.getTime(),
                         valid: true,
                     })
 
-                    if (!id) {
+                    if(id == null){
                         throw new Error("DB insert error");
                     }
 
@@ -92,6 +95,7 @@ export default Router()
                     await insertUserIfNotExist(userDataResponse.data.username, userDataResponse.data.id);
                     res.redirect(redirectUrl.toString());
                     return;
+
                 } catch(reason) {
                     console.error(reason);
                     res.status(500).send("Internal Server Error");

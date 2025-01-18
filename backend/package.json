@@ -17,7 +17,6 @@
     "url": "https://github.com/RedLine33100/AAW-Discord/issues"
   },
   "homepage": "https://github.com/RedLine33100/AAW-Discord#readme",
-  "description": "",
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
     "@types/cookie-parser": "^1.4.8",
@@ -26,6 +25,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@types/uuid": "^10.0.0",
     "axios": "^1.7.9",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
